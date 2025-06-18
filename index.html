@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Doctor Journey Calculator – India</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>The Doctor's Quest – India</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
         /* General Reset & Typography */
@@ -20,8 +20,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background-color: #f0f4f8; /* Light blue-gray background */
-            color: #2c3e50; /* Darker text for readability */
+            background-color: #e0f2f7; /* Lighter, more vibrant background */
+            color: #2c3e50;
             font-size: 16px;
             line-height: 1.6;
             padding: 2rem 1rem;
@@ -35,7 +35,7 @@
             width: 100%;
             padding: 15px 25px;
             background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Softer, more spread out shadow */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -43,8 +43,8 @@
         }
 
         .header-left img {
-            height: 45px; /* Slightly larger logo */
-            border-radius: 10px; /* More rounded corners */
+            height: 45px;
+            border-radius: 10px;
         }
 
         .header-right {
@@ -54,25 +54,26 @@
 
         .header-right > div {
             position: relative;
-            margin-left: 25px; /* More spacing between icons */
+            margin-left: 25px;
         }
 
         .header-right i {
-            font-size: 1.6rem; /* Slightly larger icons */
-            color: #34495e; /* Muted icon color */
+            font-size: 1.6rem;
+            color: #34495e;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, transform 0.2s ease; /* Add transform for hover effect */
         }
 
         .header-right i:hover {
-            color: #2980b9; /* Brighter blue on hover */
+            color: #1abc9c; /* Greenish-blue on hover */
+            transform: scale(1.1); /* Slight pop effect */
         }
 
         .header-right .count {
             position: absolute;
             top: -5px;
             right: -8px;
-            background-color: #e74c3c; /* Red notification count */
+            background-color: #e74c3c;
             color: white;
             border-radius: 50%;
             padding: 2px 6px;
@@ -81,83 +82,103 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 18px; /* Ensure circular shape */
+            min-width: 18px;
             height: 18px;
-            border: 1.5px solid #ffffff; /* White border for contrast */
+            border: 1.5px solid #ffffff;
         }
 
         /* Main Container */
         .container {
-            max-width: 760px; /* Slightly wider container */
+            max-width: 760px;
             width: 100%;
-            background-color: #ffffff; /* White background for content */
+            background-color: #ffffff;
             margin: auto;
-            padding: 3rem; /* More padding */
-            border-radius: 18px; /* Softer rounded corners */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* More prominent shadow */
-            margin-top: 100px; /* Space for the fixed header */
+            padding: 3.5rem; /* More generous padding */
+            border-radius: 20px; /* More rounded */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15); /* Deeper shadow */
+            margin-top: 100px;
+            overflow: hidden; /* For animations */
         }
 
         /* Headings */
         h1 {
-            font-size: 2.2rem; /* Larger main heading */
+            font-size: 2.5rem; /* Larger, more impactful main heading */
             margin-bottom: 0.8rem;
-            color: #2c3e50; /* Dark blue for headings */
+            color: #2c3e50;
             text-align: center;
-            font-weight: 700; /* Bolder */
+            font-weight: 800; /* Extra bold */
+            background: linear-gradient(45deg, #3498db, #1abc9c); /* Gradient text */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .lead {
             text-align: center;
             font-weight: 500;
-            color: #7f8c8d; /* Lighter gray for lead text */
-            margin-bottom: 2.5rem;
-            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-bottom: 3rem; /* More space */
+            font-size: 1.15rem;
         }
 
         h2 {
-            font-size: 1.7rem; /* Slightly larger subheadings */
-            margin: 2rem 0 1.2rem;
-            color: #34495e; /* Medium blue for subheadings */
-            font-weight: 600;
+            font-size: 1.8rem; /* Prominent subheadings */
+            margin: 2.5rem 0 1.5rem; /* More vertical rhythm */
+            color: #34495e;
+            font-weight: 700;
+            text-align: center;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #1abc9c; /* Accent color underline */
+            margin: 10px auto 0;
+            border-radius: 2px;
         }
 
         /* Paragraphs & Messages */
         p {
-            margin: 1rem 0 0.5rem;
+            margin: 1rem 0 0.8rem;
             font-weight: 500;
             color: #34495e;
         }
 
-        #class-message {
-            margin-top: 0.8rem;
-            color: #7f8c8d;
+        #class-message, #level-message {
+            margin-top: 1rem;
+            color: #5a5a5a;
             font-style: italic;
-            font-size: 0.95rem;
+            font-size: 1rem;
+            text-align: center;
+            font-weight: 600; /* Bolder message */
+            transition: opacity 0.5s ease;
         }
 
         /* Buttons & Selects */
         button,
         select {
-            padding: 0.8rem 1.5rem; /* More padding for a softer look */
-            font-size: 1rem;
-            border-radius: 10px; /* More rounded */
-            border: 1px solid #c8d8e4; /* Lighter border */
-            background-color: #ecf0f1; /* Light gray background */
+            padding: 0.9rem 1.8rem; /* More padding, larger touch area */
+            font-size: 1.05rem;
+            border-radius: 12px; /* Even more rounded */
+            border: 1px solid #c8d8e4;
+            background-color: #ecf0f1;
             color: #2c3e50;
             cursor: pointer;
-            transition: all 0.3s ease; /* Smooth transition for all properties */
-            appearance: none; /* Remove default select styles */
+            transition: all 0.3s ease, transform 0.1s ease; /* Smooth transitions */
+            appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             position: relative;
-            padding-right: 2.5rem; /* Space for custom arrow */
+            padding-right: 3rem; /* Space for custom arrow */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow for inputs */
         }
 
         select::after {
-            content: '▼'; /* Custom arrow for select */
+            content: '▼';
             position: absolute;
-            right: 15px;
+            right: 18px;
             top: 50%;
             transform: translateY(-50%);
             pointer-events: none;
@@ -166,56 +187,92 @@
 
         button:hover,
         select:hover {
-            background-color: #dbe4eb; /* Slightly darker on hover */
-            border-color: #aebec9; /* Darker border on hover */
+            background-color: #dbe4eb;
+            border-color: #aebec9;
+            transform: translateY(-1px); /* Slight lift */
+        }
+
+        button:active {
+            transform: translateY(0); /* Press effect */
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         button.calculate {
-            background-color: #3498db; /* Vibrant blue for calculate button */
+            background-color: #2ecc71; /* Eye-catching green */
             color: #ffffff;
             border: none;
-            margin-top: 1.5rem; /* More space above */
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); /* Subtle shadow for action button */
+            margin-top: 2rem; /* More space above */
+            font-weight: 700;
+            box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
+            display: block; /* Make it a block element for full width */
+            width: fit-content; /* Fit content for the button */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 1rem 2.5rem; /* Larger padding for main action button */
+            font-size: 1.15rem;
+            letter-spacing: 0.5px;
         }
 
         button.calculate:hover {
-            background-color: #2980b9; /* Darker blue on hover */
-            box-shadow: 0 6px 15px rgba(41, 128, 185, 0.4);
-            transform: translateY(-2px); /* Slight lift on hover */
+            background-color: #27ae60;
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.5);
+            transform: translateY(-3px);
         }
 
         select {
             width: 100%;
-            margin-top: 1rem;
+            margin-top: 1.2rem;
+            padding: 0.9rem 1.2rem;
         }
 
         /* Output Section */
         #output {
-            background-color: #e8f4fd; /* Light blue background for output */
-            padding: 2rem;
-            border-radius: 12px;
-            margin-top: 3rem; /* More space above output */
-            color: #2980b9; /* Blue text for output */
+            background-color: #e8fcfd; /* Very light, calming blue-green */
+            padding: 2.5rem;
+            border-radius: 15px;
+            margin-top: 4rem; /* More space above output */
+            color: #2980b9;
             font-weight: 600;
-            border-left: 6px solid #3498db; /* Thicker blue border on the left */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-            text-align: center; /* Center output text */
+            border-left: 8px solid #1abc9c; /* Thicker, vibrant border */
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            opacity: 0; /* Hidden by default for animation */
+            transform: translateY(20px); /* Slide up animation */
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        #output.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         #output h2 {
-            color: #2980b9; /* Ensure heading inside output is blue */
+            color: #1abc9c; /* Result heading color */
             margin-top: 0;
             margin-bottom: 1rem;
-            font-size: 1.8rem;
+            font-size: 2rem; /* Larger heading for results */
+            background: none; /* Remove gradient for inner heading */
+            -webkit-background-clip: initial;
+            -webkit-text-fill-color: initial;
+        }
+
+        #output h2::after {
+            background-color: #1abc9c;
         }
 
         #output .highlight {
-            color: #27ae60; /* Green for the result years */
-            font-weight: 700;
-            font-size: 2.2rem; /* Larger font for the result */
-            display: block; /* Ensures it's on its own line */
-            margin-top: 0.5rem;
+            color: #3498db; /* Primary blue for the main result */
+            font-weight: 800; /* Extra bold */
+            font-size: 3rem; /* Very large font for the result */
+            display: block;
+            margin: 1rem 0 1.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+
+        #output p {
+            font-size: 1rem;
+            color: #5a5a5a;
+            margin-bottom: 0.5rem;
         }
 
         /* Utility Classes */
@@ -225,47 +282,67 @@
 
         /* Form Container specifics */
         .form-container > div {
-            margin-bottom: 1.2rem; /* Spacing between form groups */
+            margin-bottom: 1.5rem; /* More spacing between form groups */
+            padding: 1rem;
+            border-radius: 10px;
+            background-color: #f8fcfd; /* Slight background for form sections */
+            border: 1px solid #e0eaf3;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.03);
+            transition: all 0.3s ease;
+        }
+
+        .form-container > div:hover {
+            border-color: #d0e0eb;
         }
 
         .form-container p {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
         }
 
         /* Share Section */
         .share-section {
             text-align: center;
-            margin: 3rem auto; /* More margin */
-            padding: 1.5rem;
+            margin: 4rem auto 2rem;
+            padding: 2rem;
             background-color: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
 
         .share-section p {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            font-size: 1.15rem;
             color: #34495e;
+            font-weight: 600;
         }
 
         #shareButton {
-            background-color: #2ecc71; /* Green share button */
+            background-color: #f39c12; /* Orange for share button */
             color: white;
-            padding: 12px 25px;
-            font-size: 1.05rem;
-            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            padding: 14px 30px;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 15px rgba(243, 156, 18, 0.4);
+            letter-spacing: 0.5px;
         }
 
         #shareButton:hover {
-            background-color: #27ae60;
-            box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
+            background-color: #e67e22;
+            box-shadow: 0 8px 20px rgba(230, 126, 34, 0.5);
+            transform: translateY(-3px);
         }
 
         #copySuccess {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: #27ae60;
-            margin-top: 1rem;
-            font-weight: 600;
+            margin-top: 1.2rem;
+            font-weight: 700;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        #copySuccess.visible {
+            opacity: 1;
         }
 
         /* Footer */
@@ -273,100 +350,141 @@
             text-align: center;
             margin-top: auto;
             padding: 1.5rem 0;
-            font-size: 0.9rem;
-            color: #95a5a6; /* Light gray for footer text */
+            font-size: 0.95rem;
+            color: #95a5a6;
+            font-weight: 500;
+        }
+
+        /* Progress Dots */
+        .progress-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 8px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #1abc9c;
+            transform: scale(1.2);
+        }
+
+        /* Hero Image/Illustration (Optional, but adds a lot) */
+        .hero-illustration {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .hero-illustration img {
+            max-width: 250px;
+            height: auto;
+            animation: bounceIn 1s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
             .container {
-                padding: 2rem;
-                margin-top: 80px;
+                padding: 2.5rem;
             }
-
             h1 {
-                font-size: 1.8rem;
+                font-size: 2rem;
             }
-
             h2 {
-                font-size: 1.4rem;
-            }
-
-            .lead {
-                font-size: 1rem;
-            }
-
-            button,
-            select {
-                padding: 0.7rem 1.2rem;
-                font-size: 0.95rem;
-            }
-
-            #output {
-                padding: 1.5rem;
-            }
-
-            #output h2 {
                 font-size: 1.5rem;
             }
-
+            .lead {
+                font-size: 1.05rem;
+            }
+            button.calculate {
+                padding: 0.9rem 2rem;
+                font-size: 1.05rem;
+            }
+            #output h2 {
+                font-size: 1.7rem;
+            }
             #output .highlight {
-                font-size: 1.9rem;
+                font-size: 2.5rem;
             }
         }
 
         @media (max-width: 480px) {
             body {
-                padding: 1rem;
+                padding: 0.8rem;
             }
-
             header {
                 padding: 10px 15px;
             }
-
             .header-left img {
                 height: 35px;
             }
-
             .header-right i {
                 font-size: 1.4rem;
                 margin-left: 15px;
             }
-
             .container {
-                padding: 1.5rem;
-                margin-top: 70px;
+                padding: 1.8rem;
+                margin-top: 65px;
+                border-radius: 15px;
             }
-
             h1 {
-                font-size: 1.6rem;
+                font-size: 1.8rem;
+                margin-bottom: 0.5rem;
             }
-
-            h2 {
-                font-size: 1.25rem;
-            }
-
             .lead {
-                font-size: 0.9rem;
+                font-size: 0.95rem;
+                margin-bottom: 2rem;
             }
-
-            button,
-            select {
+            h2 {
+                font-size: 1.3rem;
+                margin: 2rem 0 1rem;
+            }
+            button, select {
                 width: 100%;
                 margin-bottom: 0.8rem;
-            }
-
-            .form-container > div {
-                margin-bottom: 1rem;
-            }
-
-            .share-section {
-                padding: 1rem;
-            }
-
-            #shareButton {
-                padding: 10px 20px;
+                padding: 0.8rem 1.5rem;
                 font-size: 0.95rem;
+            }
+            button.calculate {
+                font-size: 1rem;
+                padding: 0.8rem 1.8rem;
+            }
+            .form-container > div {
+                margin-bottom: 1.2rem;
+                padding: 0.8rem;
+            }
+            #output {
+                padding: 1.8rem;
+            }
+            #output h2 {
+                font-size: 1.4rem;
+            }
+            #output .highlight {
+                font-size: 2rem;
+            }
+            .share-section {
+                padding: 1.5rem;
+                margin: 3rem auto 1rem;
+            }
+            #shareButton {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+            .hero-illustration img {
+                max-width: 200px;
             }
         }
     </style>
@@ -374,7 +492,7 @@
 <body>
     <header>
         <div class="header-left">
-            <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="Logo" class="logo" />
+            <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="Clavikl Logo" class="logo" />
         </div>
         <div class="header-right">
             <div>
@@ -383,7 +501,6 @@
                     <span class="count">3</span>
                 </a>
             </div>
-
             <div>
                 <a href="https://clavikl.com/u/" aria-label="Notifications">
                     <i class="fa fa-bell" aria-hidden="true"></i>
@@ -395,16 +512,26 @@
 
     <main class="container">
         <section class="intro">
-            <h1>How Long to Become a Doctor in India?</h1>
-            <p class="lead">Let's calculate your journey to becoming a certified doctor in India!</p>
+            <div class="hero-illustration">
+                <img src="https://www.flaticon.com/svg/vstatic/svg/3039/3039014.svg?token=exp=1718712716~hmac=62176dd03a6c50ceb1a37a6b7d383921" alt="Doctor Illustration" />
+            </div>
+            <h1>Your Doctor's Quest Begins!</h1>
+            <p class="lead">Embark on an exciting adventure to map out your journey to becoming a certified doctor in India. Let's find your path!</p>
         </section>
 
+        <div class="progress-dots">
+            <div class="dot active" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+        </div>
+
         <section id="startStep" class="card">
-            <h2>When did your academic journey begin?</h2>
-            <button id="revealClassSelect" class="calculate">Select Starting Class</button>
-            <div id="classSelectContainer" class="hidden" style="margin-top: 1rem;">
+            <h2>Level 1: Your Academic Starting Point</h2>
+            <p>Tell us, when did your serious academic journey begin?</p>
+            <button id="revealClassSelect" class="calculate">Initiate Quest!</button>
+            <div id="classSelectContainer" class="hidden">
                 <select id="classSelect">
-                    <option value="">-- Choose Class --</option>
+                    <option value="">-- Choose Your Starting Class --</option>
                     <option value="Nursery">Nursery</option>
                     <option value="LKG">LKG</option>
                     <option value="UKG">UKG</option>
@@ -422,13 +549,14 @@
                     <option value="Class 12">Class 12</option>
                 </select>
             </div>
-            <div id="class-message" class="message"></div>
+            <p id="class-message"></p>
         </section>
 
         <section id="pathStep" class="card hidden">
-            <h2>Select Your Medical Path</h2>
+            <h2>Level 2: Choose Your Hero's Path!</h2>
+            <p>Which medical specialization calls to you?</p>
             <select id="pathSelect" onchange="showForm()">
-                <option value="">-- Select Path --</option>
+                <option value="">-- Select Your Grand Path --</option>
                 <option value="mbbs">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
                 <option value="bds">BDS (Bachelor of Dental Surgery)</option>
                 <option value="bams">BAMS (Bachelor of Ayurvedic Medicine and Surgery)</option>
@@ -437,26 +565,30 @@
             <div id="formContainer" class="form-container"></div>
         </section>
 
-        <section id="output" class="output hidden"></section>
+        <section id="output" class="output hidden">
+            <h2>🎉 Quest Complete! Your Doctor's Timeline Revealed!</h2>
+            <span class="highlight"></span>
+            <p style="font-size: 0.95rem; margin-top: 1.5rem; line-height: 1.8;"></p>
+        </section>
     </main>
 
     <section class="share-section">
-        <p>Enjoyed this tool? Share it with your friends!</p>
+        <p>Achieved your quest? Share this tool with other aspiring heroes!</p>
         <button id="shareButton">
-            <i class="fas fa-share-alt" style="margin-right: 8px;"></i> Share This Tool
+            <i class="fas fa-share-alt" style="margin-right: 8px;"></i> Share Your Quest!
         </button>
-        <p id="copySuccess" class="hidden">Link copied to clipboard!</p>
+        <p id="copySuccess" class="hidden">Link copied to clipboard! Share the adventure!</p>
     </section>
 
     <footer>
-        <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
+        <p>🧠 Forged with 💖 for future doctors on their noble quest | India 🇮🇳</p>
     </footer>
 
     <script>
         document.getElementById("shareButton").addEventListener("click", function () {
             const shareData = {
-                title: "Doctor Journey Calculator – India",
-                text: "Curious about the journey to becoming a doctor in India? Use this calculator!",
+                title: "The Doctor's Quest – India",
+                text: "Embark on your own Doctor's Quest! Find out how long it takes to become a doctor in India with this fun tool!",
                 url: window.location.href
             };
 
@@ -464,10 +596,13 @@
                 navigator.share(shareData).catch(err => console.error('Sharing failed:', err));
             } else {
                 navigator.clipboard.writeText(shareData.url).then(() => {
-                    document.getElementById("copySuccess").classList.remove("hidden");
+                    const copySuccess = document.getElementById("copySuccess");
+                    copySuccess.classList.remove("hidden");
+                    copySuccess.classList.add("visible");
                     setTimeout(() => {
-                        document.getElementById("copySuccess").classList.add("hidden");
-                    }, 2500); // Increased duration for copy success message
+                        copySuccess.classList.remove("visible");
+                        copySuccess.classList.add("hidden");
+                    }, 3000); // Increased duration for copy success message
                 }).catch(err => console.error('Could not copy text: ', err));
             }
         });
@@ -479,6 +614,20 @@
         };
 
         let seriousGrade = null;
+
+        // Progress Dots Logic
+        function updateProgress(step) {
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                if (index < step) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Initial progress
+        updateProgress(1);
 
         // Show class selection dropdown on button click
         document.getElementById('revealClassSelect').onclick = () => {
@@ -496,18 +645,28 @@
             }
 
             if (earlyClasses.includes(selected)) {
-                msg.textContent = "😅 Too early! Please choose Class 6 or onward to calculate your serious academic journey.";
-                document.getElementById('pathStep').classList.add('hidden'); // Hide path step if early class selected
+                msg.innerHTML = "😅 **Oops!** Too early! To begin your Doctor's Quest, please choose **Class 6 or onward**. That's when the serious academic adventure typically starts!";
+                document.getElementById('pathStep').classList.add('hidden'); // Keep path step hidden
+                updateProgress(1); // Stay at level 1
             } else {
                 seriousGrade = selected;
-                msg.textContent = `✔️ Great! You started serious academic preparation in ${selected}. Now, choose your medical path.`;
+                msg.innerHTML = `🌟 **Fantastic!** You've set your starting point from **${selected}**. Prepare for **Level 2** - choosing your heroic path!`;
                 toggleDisplay('pathStep', true);
+                updateProgress(2); // Move to level 2
                 scrollToElement('pathStep');
             }
+            msg.classList.add('visible'); // Show message with animation
+            setTimeout(() => msg.classList.remove('visible'), 5000); // Hide after a few seconds
         };
 
         function toggleDisplay(id, show = true) {
-            document.getElementById(id).classList.toggle('hidden', !show);
+            const element = document.getElementById(id);
+            if (show) {
+                element.classList.remove('hidden');
+                // Optional: add a slight delay or animation class if desired
+            } else {
+                element.classList.add('hidden');
+            }
         }
 
         function scrollToElement(id) {
@@ -530,81 +689,94 @@
             if (!cfg) {
                 formContainer.innerHTML = '';
                 output.classList.add('hidden'); // Hide output if no path selected
+                updateProgress(2); // Stay at level 2 if path deselected
                 return;
             }
 
+            // Function to generate select options for years
             const yearOptions = (count, selectedValue = 1) => {
                 let options = '';
                 for (let i = 1; i <= count; i++) {
-                    options += `<option value="${i}" ${i === selectedValue ? 'selected' : ''}>${i}</option>`;
+                    options += `<option value="${i}" ${i === selectedValue ? 'selected' : ''}>${i} Year${i > 1 ? 's' : ''}</option>`;
                 }
                 return options;
             };
 
             let html = `
-                <p>Did you take a drop year after 12th grade before starting your medical course?</p>
-                <select id="drop12" onchange="toggle('dropYears12', this)">
-                    <option value="no">No</option><option value="yes">Yes</option>
-                </select>
-                <div id="dropYears12" class="hidden">
-                    <p>Number of drop years:</p>
-                    <select id="dropYears12Val">${yearOptions(5)}</select>
+                <div>
+                    <p>Did you take a **drop year** after 12th grade before starting your medical course?</p>
+                    <select id="drop12" onchange="toggle('dropYears12', this)">
+                        <option value="no">No</option><option value="yes">Yes</option>
+                    </select>
+                    <div id="dropYears12" class="hidden">
+                        <p>How many years did you take off?</p>
+                        <select id="dropYears12Val">${yearOptions(5)}</select>
+                    </div>
                 </div>
 
-                <p><strong>${p.toUpperCase()}</strong> course duration: ${cfg.course} years (including internship)</p>
-
-                <p>Will you have a bond period after your course?</p>
-                <select id="bond" onchange="toggle('bondYears', this)">
-                    <option value="no">No</option><option value="yes">Yes</option>
-                </select>
-                <div id="bondYears" class="hidden">
-                    <p>Bond period duration:</p>
-                    <select id="bondYearsVal">${yearOptions(4)}</select>
+                <div>
+                    <p>Your chosen **${p.toUpperCase()}** course duration is: **${cfg.course} years** (including internship!).</p>
                 </div>
 
-                <p>Are you planning to pursue Post-Graduation (PG)?</p>
-                <select id="doPG" onchange="toggle('pgSection', this)">
-                    <option value="yes">Yes</option><option value="no">No</option>
-                </select>
+                <div>
+                    <p>Will you face a **bond period** after completing your course?</p>
+                    <select id="bond" onchange="toggle('bondYears', this)">
+                        <option value="no">No</option><option value="yes">Yes</option>
+                    </select>
+                    <div id="bondYears" class="hidden">
+                        <p>How long is this bond period?</p>
+                        <select id="bondYearsVal">${yearOptions(4)}</select>
+                    </div>
+                </div>
+
+                <div>
+                    <p>Are you planning to pursue **Post-Graduation (PG)**, brave adventurer?</p>
+                    <select id="doPG" onchange="toggle('pgSection', this)">
+                        <option value="yes">Yes</option><option value="no">No</option>
+                    </select>
+                </div>
 
                 <div id="pgSection">
-                    <p>Did you take time off for PG preparation (e.g., entrance exams)?</p>
+                    <p>Did you take any time off for **PG preparation** (e.g., entrance exams)?</p>
                     <select id="pgDrop" onchange="toggle('pgDropYears', this)">
                         <option value="no">No</option><option value="yes">Yes</option>
                     </select>
                     <div id="pgDropYears" class="hidden">
-                        <p>Number of PG drop years:</p>
+                        <p>Number of PG prep years:</p>
                         <select id="pgDropYearsVal">${yearOptions(5)}</select>
                     </div>
-                    <p>PG duration: ${cfg.pg} years</p>
+                    <p>PG course duration: **${cfg.pg} years**</p>
 
                     ${cfg.optionalSS ? `
-                    <p>Are you considering a ${cfg.ssLabel}?</p>
-                    <select id="ss" onchange="toggle('ssSection', this)">
-                        <option value="no">No</option><option value="yes">Yes</option>
-                    </select>
-                    <div id="ssSection" class="hidden">
-                        <p>Did you take a break before Super-Specialty?</p>
-                        <select id="ssDrop" onchange="toggle('ssDropYears', this)">
+                    <div>
+                        <p>Are you aiming for a **${cfg.ssLabel}** (Super-Specialty/Fellowship)?</p>
+                        <select id="ss" onchange="toggle('ssSection', this)">
                             <option value="no">No</option><option value="yes">Yes</option>
                         </select>
-                        <div id="ssDropYears" class="hidden">
-                            <p>Number of SS drop years:</p>
-                            <select id="ssDropYearsVal">${yearOptions(5)}</select>
+                        <div id="ssSection" class="hidden">
+                            <p>Did you take a break before your Super-Specialty quest?</p>
+                            <select id="ssDrop" onchange="toggle('ssDropYears', this)">
+                                <option value="no">No</option><option value="yes">Yes</option>
+                            </select>
+                            <div id="ssDropYears" class="hidden">
+                                <p>Number of SS prep years:</p>
+                                <select id="ssDropYearsVal">${yearOptions(5)}</select>
+                            </div>
+                            <p>Super-Specialty duration:</p>
+                            <select id="ssDur">${[...Array(cfg.ssMax - cfg.ssMin + 1)].map((_, i) => {
+                                const yr = cfg.ssMin + i;
+                                return `<option value="${yr}">${yr} Year${yr > 1 ? 's' : ''}</option>`;
+                            }).join('')}</select>
                         </div>
-                        <p>Super-Specialty duration:</p>
-                        <select id="ssDur">${[...Array(cfg.ssMax - cfg.ssMin + 1)].map((_, i) => {
-                            const yr = cfg.ssMin + i;
-                            return `<option value="${yr}" ${yr === cfg.ssMin ? 'selected' : ''}>${yr} year(s)</option>`;
-                        }).join('')}</select>
                     </div>` : ''}
                 </div>
 
-                <button class="calculate" onclick="calculate('${p}')">🚀 Calculate My Doctor Journey</button>
+                <button class="calculate" onclick="calculate('${p}')">🚀 Calculate My Doctor Journey!</button>
             `;
 
             formContainer.innerHTML = html;
             output.classList.add('hidden'); // Hide output until calculated
+            updateProgress(2); // Ensure dot 2 is active when form loads
             scrollToElement('formContainer');
 
             // Initialize display based on default values for PG and SS
@@ -624,50 +796,52 @@
             const output = document.getElementById('output');
             let detail = 'Your estimated journey breakdown:';
 
-            detail += `<br>• Schooling (Class ${seriousGrade} to 12): ${classMap[seriousGrade]} years`;
+            detail += `<br>• **Schooling** (Class ${seriousGrade} to 12th): **${classMap[seriousGrade]} years**`;
 
             if (document.getElementById('drop12')?.value === 'yes') {
                 const dropYears12 = +document.getElementById('dropYears12Val').value;
                 totalYears += dropYears12;
-                detail += `<br>• Drop year(s) before medical course: ${dropYears12} year(s)`;
+                detail += `<br>• **Drop year(s)** before medical course: **${dropYears12} year(s)**`;
             }
 
             totalYears += cfg.course;
-            detail += `<br>• ${p.toUpperCase()} Course: ${cfg.course} years`;
+            detail += `<br>• **${p.toUpperCase()} Course** (incl. internship): **${cfg.course} years**`;
 
             if (document.getElementById('bond')?.value === 'yes') {
                 const bondYears = +document.getElementById('bondYearsVal').value;
                 totalYears += bondYears;
-                detail += `<br>• Bond Period: ${bondYears} year(s)`;
+                detail += `<br>• **Bond Period**: **${bondYears} year(s)**`;
             }
 
             if (document.getElementById('doPG')?.value === 'yes') {
                 if (document.getElementById('pgDrop')?.value === 'yes') {
                     const pgDropYears = +document.getElementById('pgDropYearsVal').value;
                     totalYears += pgDropYears;
-                    detail += `<br>• PG Entrance Prep/Drop: ${pgDropYears} year(s)`;
+                    detail += `<br>• **PG Entrance Prep/Drop**: **${pgDropYears} year(s)**`;
                 }
                 totalYears += cfg.pg;
-                detail += `<br>• Post-Graduation (PG): ${cfg.pg} years`;
+                detail += `<br>• **Post-Graduation (PG)**: **${cfg.pg} years**`;
 
                 if (cfg.optionalSS && document.getElementById('ss')?.value === 'yes') {
                     if (document.getElementById('ssDrop')?.value === 'yes') {
                         const ssDropYears = +document.getElementById('ssDropYearsVal').value;
                         totalYears += ssDropYears;
-                        detail += `<br>• SS Entrance Prep/Drop: ${ssDropYears} year(s)`;
+                        detail += `<br>• **Super-Specialty Prep/Drop**: **${ssDropYears} year(s)**`;
                     }
                     const ssDur = +document.getElementById('ssDur').value;
                     totalYears += ssDur;
-                    detail += `<br>• ${cfg.ssLabel}: ${ssDur} year(s)`;
+                    detail += `<br>• **${cfg.ssLabel}**: **${ssDur} year(s)**`;
                 }
             }
 
-            output.innerHTML = `
-                <h2>🎉 Your Total Estimated Journey to Become a Doctor via <strong>${p.toUpperCase()}</strong>:</h2>
-                <span class="highlight">${totalYears.toFixed(1)} years</span>
-                <p style="font-size: 0.95rem; margin-top: 1.5rem; line-height: 1.8;">${detail}</p>
-            `;
+            // Update output content
+            output.querySelector('h2').textContent = `🎉 Quest Complete! Your Doctor's Timeline Revealed!`;
+            output.querySelector('.highlight').textContent = `${totalYears.toFixed(1)} years`;
+            output.querySelector('p').innerHTML = detail;
+
             output.classList.remove('hidden');
+            output.classList.add('visible'); // Trigger animation
+            updateProgress(3); // Move to level 3
             scrollToElement('output');
         }
     </script>
