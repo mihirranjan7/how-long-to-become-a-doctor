@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Doctor Journey Calculator – India</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        /* General Reset & Typography */
+        :root {
+            /* Color Palette */
+            --primary-blue: #3498db;
+            --dark-blue: #2c3e50;
+            --medium-blue: #34495e;
+            --light-blue-bg: #f0f4f8;
+            --lightest-blue: #e8f4fd;
+            --accent-green: #2ecc71;
+            --accent-red: #e74c3c;
+            --text-muted: #7f8c8d;
+            --border-light: #c8d8e4;
+            --white: #ffffff;
+            --light-gray: #ecf0f1;
+            --dark-gray-hover: #dbe4eb;
+            --border-dark-hover: #aebec9;
+            --footer-text: #95a5a6;
+
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 0.8rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-xxl: 3rem;
+
+            /* Border Radii */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-pill: 9999px;
+
+            /* Shadows */
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 5px 15px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-primary: 0 4px 10px rgba(52, 152, 219, 0.3);
+            --shadow-primary-hover: 0 6px 15px rgba(41, 128, 185, 0.4);
+            --shadow-accent: 0 4px 10px rgba(46, 204, 113, 0.3);
+            --shadow-accent-hover: 0 6px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: var(--light-blue-bg);
+            color: var(--dark-blue);
+            font-size: 16px;
+            line-height: 1.6;
+            padding: var(--spacing-xl) var(--spacing-md);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 25px;
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .header-left img {
+            height: 45px;
+            border-radius: var(--radius-sm); /* Slightly less rounded for sharper logo */
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-right > div {
+            position: relative;
+            margin-left: 25px;
+        }
+
+        .header-right i {
+            font-size: 1.6rem;
+            color: var(--medium-blue);
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.2s ease-out; /* Add transform for subtle animation */
+        }
+
+        .header-right i:hover {
+            color: var(--primary-blue);
+            transform: translateY(-2px); /* Lift icon on hover */
+        }
+
+        .header-right .count {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: var(--accent-red);
+            color: var(--white);
+            border-radius: var(--radius-pill); /* Perfect circle */
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 18px;
+            height: 18px;
+            border: 1.5px solid var(--white);
+            transform: scale(1);
+            transition: transform 0.2s ease-out;
+        }
+
+        .header-right .count:hover {
+            transform: scale(1.1); /* Pop on hover */
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 760px;
+            width: 100%;
+            background-color: var(--white);
+            margin: auto;
+            padding: var(--spacing-xxl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            margin-top: 100px;
+            opacity: 0; /* Initial state for animation */
+            transform: translateY(20px); /* Initial state for animation */
+            animation: fadeInSlideUp 0.6s ease-out forwards; /* Animation for container */
+        }
+
+        @keyframes fadeInSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Headings */
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: var(--spacing-sm);
+            color: var(--dark-blue);
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .lead {
+            text-align: center;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem; /* Adjusted for better spacing */
+            font-size: 1.1rem;
+        }
+
+        h2 {
+            font-size: 1.7rem;
+            margin: var(--spacing-xl) 0 var(--spacing-lg);
+            color: var(--medium-blue);
+            font-weight: 600;
+        }
+
+        /* Paragraphs & Messages */
+        p {
+            margin: var(--spacing-md) 0 var(--spacing-xs);
+            font-weight: 500;
+            color: var(--medium-blue);
+        }
+
+        #class-message {
+            margin-top: var(--spacing-sm);
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 0.95rem;
+            min-height: 25px; /* Prevent layout shift */
+        }
+
+        /* Buttons & Selects */
+        button,
+        select {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            font-size: 1rem;
+            border-radius: var(--radius-sm); /* Slightly less rounded than container */
+            border: 1px solid var(--border-light);
+            background-color: var(--light-gray);
+            color: var(--dark-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            position: relative;
+        }
+
+        select {
+            padding-right: 2.5rem; /* Space for custom arrow */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%237f8c8d%22%20d%3D%22M287%20197.3L159.9%2069.1c-3.1-3.1-8.2-3.1-11.3%200L5.4%20197.3c-3.1%203.1-3.1%208.2%200%2011.3l19.6%2019.6c3.1%203.1%208.2%203.1%2011.3%200l113.3-113.7l113.3%20113.7c3.1%203.1%208.2%203.1%2011.3%200l19.6-19.6c3.1-3.1%203.1-8.2%200-11.3z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 0.7rem top 50%;
+            background-size: 0.65rem auto;
+        }
+
+        button:hover,
+        select:hover {
+            background-color: var(--dark-gray-hover);
+            border-color: var(--border-dark-hover);
+        }
+
+        button.calculate {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            margin-top: var(--spacing-lg);
+            font-weight: 600;
+            box-shadow: var(--shadow-primary);
+            position: relative; /* For the ripple effect */
+            overflow: hidden; /* For the ripple effect */
+        }
+
+        button.calculate:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+            box-shadow: var(--shadow-primary-hover);
+            transform: translateY(-2px);
+        }
+
+        button.calculate:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Ripple effect for buttons */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple-animation 0.6s linear;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        select {
+            width: 100%;
+            margin-top: var(--spacing-md);
+        }
+
+        /* Output Section */
+        #output {
+            background-color: var(--lightest-blue);
+            padding: var(--spacing-xl);
+            border-radius: var(--radius-md);
+            margin-top: var(--spacing-xxl);
+            color: var(--primary-blue);
+            font-weight: 600;
+            border-left: 6px solid var(--primary-blue);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transform: scale(0.95); /* Initial state for animation */
+            opacity: 0; /* Initial state for animation */
+            animation: popIn 0.5s ease-out forwards;
+            animation-delay: 0.2s; /* Delay after container animation */
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        #output h2 {
+            color: var(--primary-blue);
+            margin-top: 0;
+            margin-bottom: var(--spacing-md);
+            font-size: 1.8rem;
+        }
+
+        #output .highlight {
+            color: var(--accent-green);
+            font-weight: 700;
+            font-size: 2.2rem;
+            display: block;
+            margin-top: var(--spacing-xs);
+            position: relative;
+            padding-bottom: 0.5rem; /* Space for subtle underline */
+        }
+
+        #output .highlight::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            transform: translateX(-50%);
+            width: 60px; /* Short underline */
+            height: 3px;
+            background-color: var(--accent-green);
+            border-radius: var(--radius-pill);
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+
+        /* Form Container specifics */
+        .form-container > div {
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-container p {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        /* Share Section */
+        .share-section {
+            text-align: center;
+            margin: var(--spacing-xxl) auto;
+            padding: var(--spacing-lg);
+            background-color: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+            opacity: 0; /* Initial state for animation */
+            transform: translateY(20px); /* Initial state for animation */
+            animation: fadeInSlideUp 0.6s ease-out forwards;
+            animation-delay: 0.4s; /* Delay after output animation */
+        }
+
+        .share-section p {
+            margin-bottom: var(--spacing-md);
+            font-size: 1.1rem;
+            color: var(--medium-blue);
+        }
+
+        #shareButton {
+            background-color: var(--accent-green);
+            color: var(--white);
+            padding: 12px 25px;
+            font-size: 1.05rem;
+            box-shadow: var(--shadow-accent);
+        }
+
+        #shareButton:hover {
+            background-color: #27ae60;
+            box-shadow: var(--shadow-accent-hover);
+        }
+
+        #copySuccess {
+            font-size: 0.95rem;
+            color: var(--accent-green);
+            margin-top: var(--spacing-md);
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        #copySuccess.show {
+            opacity: 1;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding: var(--spacing-lg) 0;
+            font-size: 0.9rem;
+            color: var(--footer-text);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--spacing-xl);
+                margin-top: 80px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+            }
+
+            .lead {
+                font-size: var(--spacing-md);
+            }
+
+            button,
+            select {
+                padding: 0.7rem 1.2rem;
+                font-size: 0.95rem;
+            }
+
+            #output {
+                padding: var(--spacing-lg);
+            }
+
+            #output h2 {
+                font-size: 1.5rem;
+            }
+
+            #output .highlight {
+                font-size: 1.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: var(--spacing-md);
+            }
+
+            header {
+                padding: 10px 15px;
+            }
+
+            .header-left img {
+                height: 35px;
+            }
+
+            .header-right i {
+                font-size: 1.4rem;
+                margin-left: 15px;
+            }
+
+            .container {
+                padding: var(--spacing-lg);
+                margin-top: 70px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            .lead {
+                font-size: 0.9rem;
+            }
+
+            button,
+            select {
+                width: 100%;
+                margin-bottom: var(--spacing-sm);
+            }
+
+            .form-container > div {
+                margin-bottom: var(--spacing-md);
+            }
+
+            .share-section {
+                padding: var(--spacing-md);
+            }
+
+            #shareButton {
+                padding: 10px 20px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="Logo" class="logo" />
+        </div>
+        <div class="header-right">
+            <div>
+                <a href="https://clavikl.com/chat" aria-label="Messages">
+                    <i class="fa fa-comment" aria-hidden="true"></i>
+                    <span class="count">3</span>
+                </a>
+            </div>
+
+            <div>
+                <a href="https://clavikl.com/u/" aria-label="Notifications">
+                    <i class="fa fa-bell" aria-hidden="true"></i>
+                    <span class="count">7</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h1>How Long to Become a Doctor in India?</h1>
+            <p class="lead">Let's calculate your journey to becoming a certified doctor in India!</p>
+        </section>
+
+        <section id="startStep" class="card">
+            <h2>When did your academic journey begin?</h2>
+            <button id="revealClassSelect" class="calculate">Select Starting Class</button>
+            <div id="classSelectContainer" class="hidden" style="margin-top: 1rem;">
+                <select id="classSelect">
+                    <option value="">-- Choose Class --</option>
+                    <option value="Nursery">Nursery</option>
+                    <option value="LKG">LKG</option>
+                    <option value="UKG">UKG</option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                    <option value="Class 3">Class 3</option>
+                    <option value="Class 4">Class 4</option>
+                    <option value="Class 5">Class 5</option>
+                    <option value="Class 6">Class 6</option>
+                    <option value="Class 7">Class 7</option>
+                    <option value="Class 8">Class 8</option>
+                    <option value="Class 9">Class 9</option>
+                    <option value="Class 10">Class 10</option>
+                    <option value="Class 11">Class 11</option>
+                    <option value="Class 12">Class 12</option>
+                </select>
+            </div>
+            <div id="class-message" class="message"></div>
+        </section>
+
+        <section id="pathStep" class="card hidden">
+            <h2>Select Your Medical Path</h2>
+            <select id="pathSelect" onchange="showForm()">
+                <option value="">-- Select Path --</option>
+                <option value="mbbs">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
+                <option value="bds">BDS (Bachelor of Dental Surgery)</option>
+                <option value="bams">BAMS (Bachelor of Ayurvedic Medicine and Surgery)</option>
+                <option value="bhms">BHMS (Bachelor of Homeopathic Medicine and Surgery)</option>
+            </select>
+            <div id="formContainer" class="form-container"></div>
+        </section>
+
+        <section id="output" class="output hidden"></section>
+    </main>
+
+    <section class="share-section">
+        <p>Enjoyed this tool? Share it with your friends!</p>
+        <button id="shareButton">
+            <i class="fas fa-share-alt" style="margin-right: 8px;"></i> Share This Tool
+        </button>
+        <p id="copySuccess" class="hidden">Link copied to clipboard!</p>
+    </section>
+
+    <footer>
+        <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
+    </footer>
+
+    <script>
+        document.getElementById("shareButton").addEventListener("click", function () {
+            const shareData = {
+                title: "Doctor Journey Calculator – India",
+                text: "Curious about the journey to becoming a doctor in India? Use this calculator!",
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData).catch(err => console.error('Sharing failed:', err));
+            } else {
+                navigator.clipboard.writeText(shareData.url).then(() => {
+                    const copySuccess = document.getElementById("copySuccess");
+                    copySuccess.classList.remove("hidden");
+                    copySuccess.classList.add("show"); // Add 'show' class for animation
+                    setTimeout(() => {
+                        copySuccess.classList.remove("show"); // Remove 'show' to hide
+                        copySuccess.classList.add("hidden"); // Re-add 'hidden' after transition
+                    }, 2500); // Increased duration for copy success message
+                }).catch(err => console.error('Could not copy text: ', err));
+            }
+        });
+
+        // Ripple effect for buttons
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - (size / 2);
+                const y = e.clientY - rect.top - (size / 2);
+
+                ripple.style.width = ripple.style.height = `${size}px`;
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+
+                this.appendChild(ripple);
+
+                ripple.addEventListener('animationend', () => {
+                    ripple.remove();
+                });
+            });
+        });
+
+
+        const earlyClasses = ['Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
+        const classMap = {
+            'Class 6': 7, 'Class 7': 6, 'Class 8': 5, 'Class 9': 4, 'Class 10': 3,
+            'Class 11': 2, 'Class 12': 1
+        };
+
+        let seriousGrade = null;
+
+        // Show class selection dropdown on button click
+        document.getElementById('revealClassSelect').onclick = () => {
+            document.getElementById('classSelectContainer').classList.remove('hidden');
+            document.getElementById('revealClassSelect').classList.add('hidden'); // Hide button after click
+        };
+
+        document.getElementById('classSelect').onchange = function () {
+            const selected = this.value;
+            const msg = document.getElementById('class-message');
+
+            if (!selected) {
+                msg.textContent = "";
+                return;
+            }
+
+            if (earlyClasses.includes(selected)) {
+                msg.textContent = "😅 Too early! Please choose Class 6 or onward to calculate your serious academic journey.";
+                document.getElementById('pathStep').classList.add('hidden'); // Hide path step if early class selected
+            } else {
+                seriousGrade = selected;
+                msg.textContent = `✔️ Great! You started serious academic preparation in ${selected}. Now, choose your medical path.`;
+                toggleDisplay('pathStep', true);
+                scrollToElement('pathStep');
+            }
+        };
+
+        function toggleDisplay(id, show = true) {
+            document.getElementById(id).classList.toggle('hidden', !show);
+        }
+
+        function scrollToElement(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        const paths = {
+            mbbs: { course: 5.5, pg: 3, optionalSS: true, ssLabel: 'Super-Specialty (DM/MCh)', ssMin: 2, ssMax: 3 },
+            bds: { course: 5, pg: 3, optionalSS: true, ssLabel: 'Fellowship/Clinical Practice', ssMin: 1, ssMax: 2 },
+            bams: { course: 5.5, pg: 3, optionalSS: false },
+            bhms: { course: 5.5, pg: 3, optionalSS: false }
+        };
+
+        function showForm() {
+            const p = document.getElementById('pathSelect').value;
+            const cfg = paths[p];
+            const formContainer = document.getElementById('formContainer');
+            const output = document.getElementById('output');
+
+            if (!cfg) {
+                formContainer.innerHTML = '';
+                output.classList.add('hidden'); // Hide output if no path selected
+                return;
+            }
+
+            const yearOptions = (count, selectedValue = 1) => {
+                let options = '';
+                for (let i = 1; i <= count; i++) {
+                    options += `<option value="${i}" ${i === selectedValue ? 'selected' : ''}>${i}</option>`;
+                }
+                return options;
+            };
+
+            let html = `
+                <p>Did you take a drop year after 12th grade before starting your medical course?</p>
+                <select id="drop12" onchange="toggle('dropYears12', this)">
+                    <option value="no">No</option><option value="yes">Yes</option>
+                </select>
+                <div id="dropYears12" class="hidden">
+                    <p>Number of drop years:</p>
+                    <select id="dropYears12Val">${yearOptions(5)}</select>
+                </div>
+
+                <p><strong>${p.toUpperCase()}</strong> course duration: ${cfg.course} years (including internship)</p>
+
+                <p>Will you have a bond period after your course?</p>
+                <select id="bond" onchange="toggle('bondYears', this)">
+                    <option value="no">No</option><option value="yes">Yes</option>
+                </select>
+                <div id="bondYears" class="hidden">
+                    <p>Bond period duration:</p>
+                    <select id="bondYearsVal">${yearOptions(4)}</select>
+                </div>
+
+                <p>Are you planning to pursue Post-Graduation (PG)?</p>
+                <select id="doPG" onchange="toggle('pgSection', this)">
+                    <option value="yes">Yes</option><option value="no">No</option>
+                </select>
+
+                <div id="pgSection">
+                    <p>Did you take time off for PG preparation (e.g., entrance exams)?</p>
+                    <select id="pgDrop" onchange="toggle('pgDropYears', this)">
+                        <option value="no">No</option><option value="yes">Yes</option>
+                    </select>
+                    <div id="pgDropYears" class="hidden">
+                        <p>Number of PG drop years:</p>
+                        <select id="pgDropYearsVal">${yearOptions(5)}</select>
+                    </div>
+                    <p>PG duration: ${cfg.pg} years</p>
+
+                    ${cfg.optionalSS ? `
+                    <p>Are you considering a ${cfg.ssLabel}?</p>
+                    <select id="ss" onchange="toggle('ssSection', this)">
+                        <option value="no">No</option><option value="yes">Yes</option>
+                    </select>
+                    <div id="ssSection" class="hidden">
+                        <p>Did you take a break before Super-Specialty?</p>
+                        <select id="ssDrop" onchange="toggle('ssDropYears', this)">
+                            <option value="no">No</option><option value="yes">Yes</option>
+                        </select>
+                        <div id="ssDropYears" class="hidden">
+                            <p>Number of SS drop years:</p>
+                            <select id="ssDropYearsVal">${yearOptions(5)}</select>
+                        </div>
+                        <p>Super-Specialty duration:</p>
+                        <select id="ssDur">${[...Array(cfg.ssMax - cfg.ssMin + 1)].map((_, i) => {
+                            const yr = cfg.ssMin + i;
+                            return `<option value="${yr}" ${yr === cfg.ssMin ? 'selected' : ''}>${yr} year(s)</option>`;
+                        }).join('')}</select>
+                    </div>` : ''}
+                </div>
+
+                <button class="calculate" onclick="calculate('${p}')">🚀 Calculate My Doctor Journey</button>
+            `;
+
+            formContainer.innerHTML = html;
+            output.classList.add('hidden'); // Hide output until calculated
+            scrollToElement('formContainer');
+
+            // Initialize display based on default values for PG and SS
+            document.getElementById('pgSection').style.display = document.getElementById('doPG').value === 'yes' ? 'block' : 'none';
+            if (cfg.optionalSS) {
+                document.getElementById('ssSection').style.display = document.getElementById('ss').value === 'yes' ? 'block' : 'none';
+            }
+        }
+
+        function toggle(id, el) {
+            document.getElementById(id).classList.toggle('hidden', el.value === 'no');
+        }
+
+        function calculate(p) {
+            const cfg = paths[p];
+            let totalYears = classMap[seriousGrade] || 0;
+            const output = document.getElementById('output');
+            let detail = 'Your estimated journey breakdown:';
+
+            detail += `<br>• Schooling (Class ${seriousGrade} to 12): ${classMap[seriousGrade]} years`;
+
+            if (document.getElementById('drop12')?.value === 'yes') {
+                const dropYears12 = +document.getElementById('dropYears12Val').value;
+                totalYears += dropYears12;
+                detail += `<br>• Drop year(s) before medical course: ${dropYears12} year(s)`;
+            }
+
+            totalYears += cfg.course;
+            detail += `<br>• ${p.toUpperCase()} Course: ${cfg.course} years`;
+
+            if (document.getElementById('bond')?.value === 'yes') {
+                const bondYears = +document.getElementById('bondYearsVal').value;
+                totalYears += bondYears;
+                detail += `<br>• Bond Period: ${bondYears} year(s)`;
+            }
+
+            if (document.getElementById('doPG')?.value === 'yes') {
+                if (document.getElementById('pgDrop')?.value === 'yes') {
+                    const pgDropYears = +document.getElementById('pgDropYearsVal').value;
+                    totalYears += pgDropYears;
+                    detail += `<br>• PG Entrance Prep/Drop: ${pgDropYears} year(s)`;
+                }
+                totalYears += cfg.pg;
+                detail += `<br>• Post-Graduation (PG): ${cfg.pg} years`;
+
+                if (cfg.optionalSS && document.getElementById('ss')?.value === 'yes') {
+                    if (document.getElementById('ssDrop')?.value === 'yes') {
+                        const ssDropYears = +document.getElementById('ssDropYearsVal').value;
+                        totalYears += ssDropYears;
+                        detail += `<br>• SS Entrance Prep/Drop: ${ssDropYears} year(s)`;
+                    }
+                    const ssDur = +document.getElementById('ssDur').value;
+                    totalYears += ssDur;
+                    detail += `<br>• ${cfg.ssLabel}: ${ssDur} year(s)`;
+                }
+            }
+
+            output.innerHTML = `
+                <h2>🎉 Your Total Estimated Journey to Become a Doctor via <strong>${p.toUpperCase()}</strong>:</h2>
+                <span class="highlight">${totalYears.toFixed(1)} years</span>
+                <p style="font-size: 0.95rem; margin-top: 1.5rem; line-height: 1.8;">${detail}</p>
+            `;
+            output.classList.remove('hidden');
+            scrollToElement('output');
+        }
+    </script>
+</body>
+</html>
