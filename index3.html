@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Journey Calculator – India</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- 1. Global Reset & Design System --- */
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: #ffffff;
+            --primary-text: #1f2d3d;
+            --secondary-text: #5a6a7b;
+            --primary-accent: #007BFF;
+            --primary-accent-dark: #0056b3;
+            --success-color: #28a745;
+            --border-color: #e0e6ed;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+            --border-radius: 16px;
+            --font-family: "Poppins", "Segoe UI", sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-gradient);
+            color: var(--primary-text);
+            font-size: 16px;
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- 2. Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 15px 5%;
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left img {
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            position: relative;
+            color: var(--secondary-text);
+            font-size: 1.5rem;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .header-icon:hover {
+            color: var(--primary-accent);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border: 2px solid white;
+        }
+
+        /* --- 3. Main Container & Intro --- */
+        .container {
+            max-width: 680px;
+            width: 100%;
+            margin: 100px auto 2rem auto;
+            padding: 2rem;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 2.8rem); /* Fluid font size */
+            font-weight: 700;
+            color: var(--primary-text);
+            margin-bottom: 0.5rem;
+        }
+
+        .lead {
+            font-size: 1.1rem;
+            color: var(--secondary-text);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* --- 4. Step Cards & Transitions (The "Game" Mechanic) --- */
+        .step-card {
+            background: var(--card-bg);
+            padding: 2rem 2.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            
+            /* Animation state */
+            opacity: 0;
+            transform: translateY(20px);
+            max-height: 0;
+            overflow: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease, max-height 0.8s ease, padding 0.5s ease;
+        }
+
+        .step-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            max-height: 1000px; /* Large enough for content */
+            padding: 2rem 2.5rem;
+        }
+        
+        .step-card h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        /* --- 5. Form Elements & Inputs --- */
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group p {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary-text);
+        }
+
+        .input-group .description {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--secondary-text);
+            margin-top: -1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1rem;
+            font-family: var(--font-family);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background-color: #f8f9fa;
+            color: var(--primary-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        
+        select {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1em;
+        }
+
+        select:hover, button:hover {
+            border-color: var(--primary-accent);
+            background-color: #f1f3f5;
+        }
+        
+        button.calculate, button.start-btn {
+            background-color: var(--primary-accent);
+            color: #ffffff;
+            border: none;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.2);
+        }
+
+        button.calculate:hover, button.start-btn:hover {
+            background-color: var(--primary-accent-dark);
+            box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            margin-top: 1rem;
+            text-align: center;
+            font-style: italic;
+            color: var(--secondary-text);
+            transition: all 0.3s ease;
+        }
+        
+        .nested-group {
+            margin-top: 1rem;
+            padding-left: 1.5rem;
+            border-left: 3px solid var(--border-color);
+            
+            /* Animation */
+            opacity: 0;
+            max-height: 0;
+            transform: translateY(10px);
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .nested-group.visible {
+            opacity: 1;
+            max-height: 500px;
+            transform: translateY(0);
+            margin-top: 1.5rem;
+        }
+
+        /* --- 6. Output Section --- */
+        #output {
+            background: linear-gradient(135deg, #0b2545 0%, #103b65 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: var(--border-radius);
+            margin-top: 2rem;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(11, 37, 69, 0.3);
+            
+            /* Animation */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.5s ease-out;
+        }
+
+        #output.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        #output h2 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        #output .total-years {
+            font-size: clamp(3rem, 10vw, 4.5rem);
+            font-weight: 700;
+            color: #4CAF50; /* A vibrant, successful green */
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+        
+        #output .breakdown {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 300px;
+            text-align: left;
+        }
+        
+        #output .breakdown li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        #output .breakdown li:last-child {
+            border-bottom: none;
+        }
+
+
+        /* --- 7. Share & Footer --- */
+        .share-section {
+            text-align: center;
+            margin: 2rem auto;
+        }
+        
+        #shareButton {
+            max-width: 250px;
+            background: var(--success-color);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        #shareButton:hover {
+             background: #218838;
+             box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        #copySuccess {
+            display: none;
+            color: var(--success-color);
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: auto;
+            padding: 2rem 0 1rem 0;
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+        }
+
+        /* --- 8. Responsive Design --- */
+        @media (max-width: 768px) {
+             .container {
+                padding: 1rem;
+             }
+             .step-card {
+                padding: 1.5rem;
+             }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="Logo" class="logo" />
+        </div>
+        <div class="header-right">
+            <a href="https://clavikl.com/chat" class="header-icon" aria-label="Messages">
+                <i class="fa fa-comment"></i>
+                <span class="notification-badge">3</span>
+            </a>
+            <a href="https://clavikl.com/u/" class="header-icon" aria-label="Notifications">
+                <i class="fa fa-bell"></i>
+                <span class="notification-badge">7</span>
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <h1>Doctor Journey Calculator</h1>
+            <p class="lead">Let’s map out the years it will take for you to become a doctor in India. Start your journey below!</p>
+        </section>
+
+        <section id="startStep" class="step-card visible">
+            <h2>Step 1: Your Starting Point</h2>
+            <div class="input-group">
+                <p>When did your serious medical prep begin?</p>
+                <select id="classSelect">
+                    <option value="">-- Choose Class --</option>
+                    <option value="Nursery">Nursery</option>
+                    <option value="LKG">LKG</option>
+                    <option value="UKG">UKG</option>
+                    <option value="Class 1">Class 1</option>
+                    <option value="Class 2">Class 2</option>
+                    <option value="Class 3">Class 3</option>
+                    <option value="Class 4">Class 4</option>
+                    <option value="Class 5">Class 5</option>
+                    <option value="Class 6">Class 6</option>
+                    <option value="Class 7">Class 7</option>
+                    <option value="Class 8">Class 8</option>
+                    <option value="Class 9">Class 9</option>
+                    <option value="Class 10">Class 10</option>
+                    <option value="Class 11">Class 11</option>
+                    <option value="Class 12">Class 12</option>
+                </select>
+                <div id="class-message" class="message"></div>
+            </div>
+        </section>
+
+        <section id="pathStep" class="step-card">
+            <h2>Step 2: Choose Your Path</h2>
+            <div class="input-group">
+                <p>Which medical degree are you pursuing?</p>
+                <select id="pathSelect">
+                    <option value="">-- Select Path --</option>
+                    <option value="mbbs">MBBS</option>
+                    <option value="bds">BDS</option>
+                    <option value="bams">BAMS</option>
+                    <option value="bhms">BHMS</option>
+                </select>
+            </div>
+            <div id="formContainer"></div>
+        </section>
+
+        <section id="output"></section>
+    </main>
+
+    <section class="share-section">
+        <p>Enjoyed this tool? Share it with your friends!</p>
+        <button id="shareButton">
+            <i class="fas fa-share-alt"></i> Share This Calculator
+        </button>
+        <p id="copySuccess">Link copied to clipboard!</p>
+    </section>
+
+    <footer>
+        <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- CONFIGURATION ---
+    const earlyClasses = ['Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
+    const classMap = {
+        'Class 6': 7, 'Class 7': 6, 'Class 8': 5, 'Class 9': 4, 'Class 10': 3,
+        'Class 11': 2, 'Class 12': 1
+    };
+    const paths = {
+        mbbs: { name: "MBBS", course: 5.5, pg: 3, optionalSS: true, ssLabel: 'Super‑Specialty (DM/MCh)', ssMin: 2, ssMax: 3 },
+        bds:  { name: "BDS", course: 5,   pg: 3, optionalSS: true, ssLabel: 'Fellowship/Clinical Practice', ssMin: 1, ssMax: 2 },
+        bams: { name: "BAMS", course: 5.5, pg: 3, optionalSS: false },
+        bhms: { name: "BHMS", course: 5.5, pg: 3, optionalSS: false }
+    };
+
+    let seriousGrade = null;
+    let calculationBreakdown = {};
+
+    // --- DOM ELEMENTS ---
+    const classSelect = document.getElementById('classSelect');
+    const classMessage = document.getElementById('class-message');
+    const pathSelect = document.getElementById('pathSelect');
+    const formContainer = document.getElementById('formContainer');
+    const output = document.getElementById('output');
+    const shareButton = document.getElementById('shareButton');
+    const copySuccess = document.getElementById('copySuccess');
+
+    // --- EVENT LISTENERS ---
+    classSelect.onchange = handleClassSelection;
+    pathSelect.onchange = showForm;
+    shareButton.addEventListener('click', shareTool);
+
+    // --- FUNCTIONS ---
+    function handleClassSelection() {
+        const selected = this.value;
+        classMessage.textContent = "";
+
+        if (!selected) return;
+
+        if (earlyClasses.includes(selected)) {
+            classMessage.textContent = "😅 That's a bit too early! Please count from Class 6 onwards for a more accurate timeline.";
+            hideStep('pathStep');
+        } else {
+            seriousGrade = selected;
+            classMessage.textContent = `✔️ Great! Starting from ${selected}. Let's choose your medical path.`;
+            // Timeout to allow message to be read before scrolling
+            setTimeout(() => {
+                showStep('pathStep');
+                scrollToElement('pathStep');
+            }, 500);
+        }
+    }
+    
+    function showForm() {
+        const pathKey = pathSelect.value;
+        const cfg = paths[pathKey];
+        
+        // Clear previous form and output
+        formContainer.innerHTML = '';
+        hideStep('output');
+
+        if (!cfg) return;
+
+        const yearOptions = count => Array.from({ length: count }, (_, i) => `<option value="${i + 1}">${i + 1} year${i > 0 ? 's' : ''}</option>`).join('');
+
+        let html = `
+            <div class="input-group">
+                <p>Did you take a drop after 12th for entrance exams?</p>
+                <select id="drop12" data-name="Entrance Prep Drop">
+                    <option value="no">No</option><option value="yes">Yes</option>
+                </select>
+                <div id="dropYears12Container" class="nested-group">
+                    <select id="dropYears12Val">${yearOptions(5)}</select>
+                </div>
+            </div>
+            <div class="input-group">
+                <p>${cfg.name} Duration</p>
+                <div class="description">${cfg.course} years (including mandatory internship)</div>
+            </div>
+            <div class="input-group">
+                <p>Do you have a mandatory rural/government service bond?</p>
+                <select id="bond" data-name="Service Bond">
+                    <option value="no">No</option><option value="yes">Yes</option>
+                </select>
+                <div id="bondYearsContainer" class="nested-group">
+                    <select id="bondYearsVal">${yearOptions(4)}</select>
+                </div>
+            </div>
+            <div class="input-group">
+                <p>Are you planning to pursue Post-Graduation (PG)?</p>
+                <select id="doPG">
+                    <option value="yes">Yes</option><option value="no">No</option>
+                </select>
+            </div>
+            <div id="pgSection" class="nested-group visible">
+                <div class="input-group">
+                    <p>Did you take time off for PG preparation?</p>
+                    <select id="pgDrop" data-name="PG Prep Drop">
+                        <option value="no">No</option><option value="yes">Yes</option>
+                    </select>
+                    <div id="pgDropYearsContainer" class="nested-group">
+                        <select id="pgDropYearsVal">${yearOptions(5)}</select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <p>PG Duration</p>
+                    <div class="description">${cfg.pg} years</div>
+                </div>
+                ${cfg.optionalSS ? `
+                <div class="input-group">
+                    <p>Will you pursue ${cfg.ssLabel} after PG?</p>
+                    <select id="ss">
+                        <option value="no">No</option><option value="yes">Yes</option>
+                    </select>
+                </div>
+                <div id="ssSection" class="nested-group">
+                     <div class="input-group">
+                        <p>Break before Super-Specialty?</p>
+                        <select id="ssDrop" data-name="SS Prep Drop">
+                            <option value="no">No</option><option value="yes">Yes</option>
+                        </select>
+                         <div id="ssDropYearsContainer" class="nested-group">
+                             <select id="ssDropYearsVal">${yearOptions(5)}</select>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <p>Super-Specialty Duration</p>
+                        <select id="ssDur">
+                            ${Array.from({ length: cfg.ssMax - cfg.ssMin + 1 }, (_, i) => {
+                                const yr = cfg.ssMin + i;
+                                return `<option value="${yr}">${yr} year${yr > 1 ? 's' : ''}</option>`;
+                            }).join('')}
+                        </select>
+                    </div>
+                </div>` : ''}
+            </div>
+            <button class="calculate" onclick="calculate('${pathKey}')">🚀 Calculate My Journey</button>
+        `;
+        
+        formContainer.innerHTML = html;
+        // Add event listeners for the new dynamic elements
+        attachToggleListeners();
+    }
+    
+    function attachToggleListeners() {
+        // Toggles for nested dropdowns
+        document.getElementById('drop12')?.addEventListener('change', e => toggleNestedGroup('dropYears12Container', e.target.value));
+        document.getElementById('bond')?.addEventListener('change', e => toggleNestedGroup('bondYearsContainer', e.target.value));
+        document.getElementById('pgDrop')?.addEventListener('change', e => toggleNestedGroup('pgDropYearsContainer', e.target.value));
+        
+        // Toggling entire sections
+        document.getElementById('doPG')?.addEventListener('change', e => toggleNestedGroup('pgSection', e.target.value));
+        if(document.getElementById('ss')) {
+           document.getElementById('ss').addEventListener('change', e => toggleNestedGroup('ssSection', e.target.value));
+           document.getElementById('ssDrop').addEventListener('change', e => toggleNestedGroup('ssDropYearsContainer', e.target.value));
+        }
+    }
+
+    // This global function is needed because it's called from an onclick attribute in dynamically generated HTML
+    window.calculate = function(pathKey) {
+        const cfg = paths[pathKey];
+        let total = 0;
+        calculationBreakdown = {};
+
+        // Helper to add to total and breakdown
+        const addTime = (label, value) => {
+            if (value > 0) {
+                total += value;
+                calculationBreakdown[label] = value;
+            }
+        };
+
+        addTime('Schooling till 12th', classMap[seriousGrade] || 0);
+
+        if (document.getElementById('drop12')?.value === 'yes') {
+            addTime('Entrance Prep', +document.getElementById('dropYears12Val').value);
+        }
+
+        addTime(cfg.name, cfg.course);
+
+        if (document.getElementById('bond')?.value === 'yes') {
+            addTime('Service Bond', +document.getElementById('bondYearsVal').value);
+        }
+
+        if (document.getElementById('doPG')?.value === 'yes') {
+            if (document.getElementById('pgDrop')?.value === 'yes') {
+                addTime('PG Prep', +document.getElementById('pgDropYearsVal').value);
+            }
+            addTime('Post-Graduation', cfg.pg);
+
+            if (cfg.optionalSS && document.getElementById('ss')?.value === 'yes') {
+                if (document.getElementById('ssDrop')?.value === 'yes') {
+                    addTime('SS Prep', +document.getElementById('ssDropYearsVal').value);
+                }
+                const ssDur = +document.getElementById('ssDur').value;
+                addTime(cfg.ssLabel, ssDur);
+            }
+        }
+        
+        let breakdownHtml = Object.entries(calculationBreakdown)
+            .map(([label, years]) => `<li><span>${label}</span> <span>${years} yrs</span></li>`)
+            .join('');
+
+        output.innerHTML = `
+            <h2>Your Journey via <strong>${cfg.name.toUpperCase()}</strong></h2>
+            <div class="total-years">${total.toFixed(1)} years</div>
+            <ul class="breakdown">${breakdownHtml}</ul>
+        `;
+        showStep('output');
+        scrollToElement('output');
+    }
+
+    // --- UTILITY FUNCTIONS ---
+    function toggleNestedGroup(id, selectedValue) {
+        document.getElementById(id)?.classList.toggle('visible', selectedValue === 'yes');
+    }
+    
+    function showStep(id) {
+        document.getElementById(id).classList.add('visible');
+    }
+
+    function hideStep(id) {
+        document.getElementById(id).classList.remove('visible');
+    }
+
+    function scrollToElement(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    async function shareTool() {
+        const shareData = {
+            title: "Doctor Journey Calculator – India",
+            text: "How long to become a doctor in India? I just calculated my journey with this cool tool!",
+            url: window.location.href
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                throw new Error('Web Share API not supported');
+            }
+        } catch (err) {
+            // Fallback for desktop/unsupported browsers
+            navigator.clipboard.writeText(shareData.url).then(() => {
+                copySuccess.style.display = "block";
+                setTimeout(() => {
+                    copySuccess.style.display = "none";
+                }, 2500);
+            });
+        }
+    }
+});
+</script>
+
+</body>
+</html>
