@@ -1,675 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Doctor Journey Calculator – India</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
-    <style>
-        /* General Reset & Typography */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Journey Calculator – India</title>
+<style>/* Reset & Font */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
 
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background-color: #f0f4f8; /* Light blue-gray background */
-            color: #2c3e50; /* Darker text for readability */
-            font-size: 16px;
-            line-height: 1.6;
-            padding: 2rem 1rem;
-        }
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: #ffffff;
+  color: #1f2d3d;
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
 
-        /* Header */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 15px 25px;
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-        }
+/* Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+}
 
-        .header-left img {
-            height: 45px; /* Slightly larger logo */
-            border-radius: 10px; /* More rounded corners */
-        }
+.header-left img {
+  height: 40px; /* Logo size */
+}
 
-        .header-right {
-            display: flex;
-            align-items: center;
-        }
+.header-right i {
+  font-size: 1.5rem;
+  margin-left: 20px;
+  cursor: pointer;
+  color: #333;
+}
 
-        .header-right > div {
-            position: relative;
-            margin-left: 25px; /* More spacing between icons */
-        }
+.header-right i:hover {
+  color: #007BFF;
+}
 
-        .header-right i {
-            font-size: 1.6rem; /* Slightly larger icons */
-            color: #34495e; /* Muted icon color */
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
+/* Main Container */
+.container {
+  max-width: 720px;
+  width: 100%;
+  background-color: aliceblue;
+  margin: auto;
+  padding: 2.5rem 2rem;
+  border-radius: 16px;
+  margin-top: 80px; /* Add space for the fixed header */
+}
 
-        .header-right i:hover {
-            color: #2980b9; /* Brighter blue on hover */
-        }
+/* Headings */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #0b2545;
+  text-align: center;
+}
 
-        .header-right .count {
-            position: absolute;
-            top: -5px;
-            right: -8px;
-            background-color: #e74c3c; /* Red notification count */
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 18px; /* Ensure circular shape */
-            height: 18px;
-            border: 1.5px solid #ffffff; /* White border for contrast */
-        }
+.lead {
+  text-align: center;
+  font-weight: 500;
+  color: #5a5a5a;
+  margin-bottom: 2rem;
+}
 
-        /* Main Container */
-        .container {
-            max-width: 760px; /* Slightly wider container */
-            width: 100%;
-            background-color: #ffffff; /* White background for content */
-            margin: auto;
-            padding: 3rem; /* More padding */
-            border-radius: 18px; /* Softer rounded corners */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* More prominent shadow */
-            margin-top: 100px; /* Space for the fixed header */
-        }
+h2 {
+  font-size: 1.5rem;
+  margin: 1.5rem 0 1rem;
+  color: #1a1a1a;
+}
 
-        /* Headings */
-        h1 {
-            font-size: 2.2rem; /* Larger main heading */
-            margin-bottom: 0.8rem;
-            color: #2c3e50; /* Dark blue for headings */
-            text-align: center;
-            font-weight: 700; /* Bolder */
-        }
+/* Paragraphs & Messages */
+p {
+  margin: 1rem 0 0.5rem;
+  font-weight: 500;
+}
 
-        .lead {
-            text-align: center;
-            font-weight: 500;
-            color: #7f8c8d; /* Lighter gray for lead text */
-            margin-bottom: 2.5rem;
-            font-size: 1.1rem;
-        }
+#class-message {
+  margin-top: 0.5rem;
+  color: #5a5a5a;
+  font-style: italic;
+}
 
-        h2 {
-            font-size: 1.7rem; /* Slightly larger subheadings */
-            margin: 2rem 0 1.2rem;
-            color: #34495e; /* Medium blue for subheadings */
-            font-weight: 600;
-        }
+/* Buttons & Selects */
+button,
+select {
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  border: 1px solid #d0d7de;
+  background-color: #e6ecf2;
+  color: #1f2d3d;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-        /* Paragraphs & Messages */
-        p {
-            margin: 1rem 0 0.5rem;
-            font-weight: 500;
-            color: #34495e;
-        }
+button:hover,
+select:hover {
+  background-color: #d3dce6;
+}
 
-        #class-message {
-            margin-top: 0.8rem;
-            color: #7f8c8d;
-            font-style: italic;
-            font-size: 0.95rem;
-        }
+button.calculate {
+  background-color: #0b2545;
+  color: #ffffff;
+  border: none;
+  margin-top: 1rem;
+}
 
-        /* Buttons & Selects */
-        button,
-        select {
-            padding: 0.8rem 1.5rem; /* More padding for a softer look */
-            font-size: 1rem;
-            border-radius: 10px; /* More rounded */
-            border: 1px solid #c8d8e4; /* Lighter border */
-            background-color: #ecf0f1; /* Light gray background */
-            color: #2c3e50;
-            cursor: pointer;
-            transition: all 0.3s ease; /* Smooth transition for all properties */
-            appearance: none; /* Remove default select styles */
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            position: relative;
-            padding-right: 2.5rem; /* Space for custom arrow */
-        }
+button.calculate:hover {
+  background-color: #103b65;
+}
 
-        select::after {
-            content: '▼'; /* Custom arrow for select */
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: #7f8c8d;
-        }
+select {
+  width: 100%;
+  margin-top: 1rem;
+}
 
-        button:hover,
-        select:hover {
-            background-color: #dbe4eb; /* Slightly darker on hover */
-            border-color: #aebec9; /* Darker border on hover */
-        }
+/* Output Section */
+#output {
+  background-color: #f1f4f8;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-top: 2rem;
+  color: #0b2545;
+  font-weight: 600;
+  border-left: 5px solid #0b2545;
+}
 
-        button.calculate {
-            background-color: #3498db; /* Vibrant blue for calculate button */
-            color: #ffffff;
-            border: none;
-            margin-top: 1.5rem; /* More space above */
-            font-weight: 600;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3); /* Subtle shadow for action button */
-        }
+/* Hidden Utility */
+.hidden {
+  display: none;
+}
 
-        button.calculate:hover {
-            background-color: #2980b9; /* Darker blue on hover */
-            box-shadow: 0 6px 15px rgba(41, 128, 185, 0.4);
-            transform: translateY(-2px); /* Slight lift on hover */
-        }
+/* Footer */
+footer {
+  text-align: center;
+  margin-top: auto;
+  padding: 1rem 0;
+  font-size: 0.85rem;
+  color: #999;
+}
 
-        select {
-            width: 100%;
-            margin-top: 1rem;
-        }
+/* Responsive Design */
+@media (max-width: 600px) {
+  body {
+    padding: 1rem;
+  }
 
-        /* Output Section */
-        #output {
-            background-color: #e8f4fd; /* Light blue background for output */
-            padding: 2rem;
-            border-radius: 12px;
-            margin-top: 3rem; /* More space above output */
-            color: #2980b9; /* Blue text for output */
-            font-weight: 600;
-            border-left: 6px solid #3498db; /* Thicker blue border on the left */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); /* Subtle shadow */
-            text-align: center; /* Center output text */
-        }
+  .container {
+    padding: 15vh 1rem;
+  }
 
-        #output h2 {
-            color: #2980b9; /* Ensure heading inside output is blue */
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
-        }
+  h1 {
+    font-size: 1.6rem;
+  }
 
-        #output .highlight {
-            color: #27ae60; /* Green for the result years */
-            font-weight: 700;
-            font-size: 2.2rem; /* Larger font for the result */
-            display: block; /* Ensures it's on its own line */
-            margin-top: 0.5rem;
-        }
+  h2 {
+    font-size: 1.25rem;
+  }
 
-        /* Utility Classes */
-        .hidden {
-            display: none;
-        }
-
-        /* Form Container specifics */
-        .form-container > div {
-            margin-bottom: 1.2rem; /* Spacing between form groups */
-        }
-
-        .form-container p {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Share Section */
-        .share-section {
-            text-align: center;
-            margin: 3rem auto; /* More margin */
-            padding: 1.5rem;
-            background-color: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
-        }
-
-        .share-section p {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            color: #34495e;
-        }
-
-        #shareButton {
-            background-color: #2ecc71; /* Green share button */
-            color: white;
-            padding: 12px 25px;
-            font-size: 1.05rem;
-            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
-        }
-
-        #shareButton:hover {
-            background-color: #27ae60;
-            box-shadow: 0 6px 15px rgba(39, 174, 96, 0.4);
-        }
-
-        #copySuccess {
-            font-size: 0.95rem;
-            color: #27ae60;
-            margin-top: 1rem;
-            font-weight: 600;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            margin-top: auto;
-            padding: 1.5rem 0;
-            font-size: 0.9rem;
-            color: #95a5a6; /* Light gray for footer text */
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 2rem;
-                margin-top: 80px;
-            }
-
-            h1 {
-                font-size: 1.8rem;
-            }
-
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            .lead {
-                font-size: 1rem;
-            }
-
-            button,
-            select {
-                padding: 0.7rem 1.2rem;
-                font-size: 0.95rem;
-            }
-
-            #output {
-                padding: 1.5rem;
-            }
-
-            #output h2 {
-                font-size: 1.5rem;
-            }
-
-            #output .highlight {
-                font-size: 1.9rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 1rem;
-            }
-
-            header {
-                padding: 10px 15px;
-            }
-
-            .header-left img {
-                height: 35px;
-            }
-
-            .header-right i {
-                font-size: 1.4rem;
-                margin-left: 15px;
-            }
-
-            .container {
-                padding: 1.5rem;
-                margin-top: 70px;
-            }
-
-            h1 {
-                font-size: 1.6rem;
-            }
-
-            h2 {
-                font-size: 1.25rem;
-            }
-
-            .lead {
-                font-size: 0.9rem;
-            }
-
-            button,
-            select {
-                width: 100%;
-                margin-bottom: 0.8rem;
-            }
-
-            .form-container > div {
-                margin-bottom: 1rem;
-            }
-
-            .share-section {
-                padding: 1rem;
-            }
-
-            #shareButton {
-                padding: 10px 20px;
-                font-size: 0.95rem;
-            }
-        }
-    </style>
+  button,
+  select {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+</style>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Include FontAwesome for icons -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <div class="header-left">
-            <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="Logo" class="logo" />
-        </div>
-        <div class="header-right">
-            <div>
-                <a href="https://clavikl.com/chat" aria-label="Messages">
-                    <i class="fa fa-comment" aria-hidden="true"></i>
-                    <span class="count">3</span>
-                </a>
-            </div>
+  <!-- Header with logo, chat icon, and notification icon -->
+  <header style="position: fixed; top: 0; left: 0; width: 100%; padding: 10px 20px; background-color: #fff;  display: flex; justify-content: space-between; align-items: center; z-index: 1000;">
+   <div class="header-left">
+  <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="Logo" class="logo" style="height: 40px; border-radius: 8px;" />
+</div>
+<div class="header-right" style="display: flex; align-items: center;">
+  <!-- Message Icon with count -->
+  <div style="position: relative; margin-left: 10px;">
+    <a href="https://clavikl.com/chat">
+      <i class="fa fa-comment" aria-hidden="true" style="font-size: 1.5rem; cursor: pointer; color: #333;"></i>
+    </a>
+    <span style="position: absolute; top: -3px; right: -3px; background-color: red; color: white; border-radius: 50%; padding: 1px 4px; font-size: 0.6rem; font-weight: bold;">3</span>
+  </div>
 
-            <div>
-                <a href="https://clavikl.com/u/" aria-label="Notifications">
-                    <i class="fa fa-bell" aria-hidden="true"></i>
-                    <span class="count">7</span>
-                </a>
-            </div>
-        </div>
-    </header>
+  <!-- Notification Icon with count -->
+  <div style="position: relative; margin-left: 10px;">
+    <a href="https://clavikl.com/u/">
+      <i class="fa fa-bell" aria-hidden="true" style="font-size: 1.5rem; cursor: pointer; color: #333;"></i>
+    </a>
+    <span style="position: absolute; top: -3px; right: -3px; background-color: red; color: white; border-radius: 50%; padding: 1px 4px; font-size: 0.6rem; font-weight: bold;">7</span>
+  </div>
+</div>
 
-    <main class="container">
-        <section class="intro">
-            <h1>How Long to Become a Doctor in India?</h1>
-            <p class="lead">Let's calculate your journey to becoming a certified doctor in India!</p>
-        </section>
+</div>
 
-        <section id="startStep" class="card">
-            <h2>When did your academic journey begin?</h2>
-            <button id="revealClassSelect" class="calculate">Select Starting Class</button>
-            <div id="classSelectContainer" class="hidden" style="margin-top: 1rem;">
-                <select id="classSelect">
-                    <option value="">-- Choose Class --</option>
-                    <option value="Nursery">Nursery</option>
-                    <option value="LKG">LKG</option>
-                    <option value="UKG">UKG</option>
-                    <option value="Class 1">Class 1</option>
-                    <option value="Class 2">Class 2</option>
-                    <option value="Class 3">Class 3</option>
-                    <option value="Class 4">Class 4</option>
-                    <option value="Class 5">Class 5</option>
-                    <option value="Class 6">Class 6</option>
-                    <option value="Class 7">Class 7</option>
-                    <option value="Class 8">Class 8</option>
-                    <option value="Class 9">Class 9</option>
-                    <option value="Class 10">Class 10</option>
-                    <option value="Class 11">Class 11</option>
-                    <option value="Class 12">Class 12</option>
-                </select>
-            </div>
-            <div id="class-message" class="message"></div>
-        </section>
+  </header>
 
-        <section id="pathStep" class="card hidden">
-            <h2>Select Your Medical Path</h2>
-            <select id="pathSelect" onchange="showForm()">
-                <option value="">-- Select Path --</option>
-                <option value="mbbs">MBBS (Bachelor of Medicine, Bachelor of Surgery)</option>
-                <option value="bds">BDS (Bachelor of Dental Surgery)</option>
-                <option value="bams">BAMS (Bachelor of Ayurvedic Medicine and Surgery)</option>
-                <option value="bhms">BHMS (Bachelor of Homeopathic Medicine and Surgery)</option>
-            </select>
-            <div id="formContainer" class="form-container"></div>
-        </section>
+  <!-- Main content container -->
+  <main class="container" style="margin-top: 80px;">
+    <!-- Title and tagline moved to the main section -->
+    <section class="intro">
+      <h1>How long to become a doctor?</h1>
+      <p class="lead">Let’s figure out when you'll officially become a doctor in India.</p>
+    </section>
 
-        <section id="output" class="output hidden"></section>
-    </main>
+    <section id="startStep" class="card">
+      <h2>When did your academic journey begin?</h2>
+      <button id="revealClassSelect" class="calculate">Select Starting Class</button>
+      <div id="classSelectContainer" class="hidden" style="margin-top: 1rem;">
+        <select id="classSelect">
+          <option value="">-- Choose Class --</option>
+          <option value="Nursery">Nursery</option>
+          <option value="LKG">LKG</option>
+          <option value="UKG">UKG</option>
+          <option value="Class 1">Class 1</option>
+          <option value="Class 2">Class 2</option>
+          <option value="Class 3">Class 3</option>
+          <option value="Class 4">Class 4</option>
+          <option value="Class 5">Class 5</option>
+          <option value="Class 6">Class 6</option>
+          <option value="Class 7">Class 7</option>
+          <option value="Class 8">Class 8</option>
+          <option value="Class 9">Class 9</option>
+          <option value="Class 10">Class 10</option>
+          <option value="Class 11">Class 11</option>
+          <option value="Class 12">Class 12</option>
+        </select>
+      </div>
+      <div id="class-message" class="message"></div>
+    </section>
 
-    <section class="share-section">
-        <p>Enjoyed this tool? Share it with your friends!</p>
-        <button id="shareButton">
-            <i class="fas fa-share-alt" style="margin-right: 8px;"></i> Share This Tool
-        </button>
-        <p id="copySuccess" class="hidden">Link copied to clipboard!</p>
-    </section>
+    <section id="pathStep" class="card hidden">
+      <h2>Select Your Medical Path</h2>
+      <select id="pathSelect" onchange="showForm()">
+        <option value="">-- Select Path --</option>
+        <option value="mbbs">MBBS</option>
+        <option value="bds">BDS</option>
+        <option value="bams">BAMS</option>
+        <option value="bhms">BHMS</option>
+      </select>
+      <div id="formContainer" class="form-container"></div>
+    </section>
 
-    <footer>
-        <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
-    </footer>
+    <section id="output" class="output"></section>
+  </main>
 
-    <script>
-        document.getElementById("shareButton").addEventListener("click", function () {
-            const shareData = {
-                title: "Doctor Journey Calculator – India",
-                text: "Curious about the journey to becoming a doctor in India? Use this calculator!",
-                url: window.location.href
-            };
+  <section class="share-section" style="text-align: center; margin: 2rem auto;">
+  <p style="margin-bottom: 0.5rem;">Enjoyed this tool? Share it with your friends!</p>
+  <button id="shareButton" class="calculate" style="padding: 10px 20px; font-size: 1rem; cursor: pointer;">
+    <i class="fas fa-share-alt" style="margin-right: 5px;"></i> Share This
+  </button>
+  <p id="copySuccess" style="display: none; font-size: 0.9rem; color: green; margin-top: 0.5rem;">Link copied to clipboard!</p>
+</section>
 
-            if (navigator.share) {
-                navigator.share(shareData).catch(err => console.error('Sharing failed:', err));
-            } else {
-                navigator.clipboard.writeText(shareData.url).then(() => {
-                    document.getElementById("copySuccess").classList.remove("hidden");
-                    setTimeout(() => {
-                        document.getElementById("copySuccess").classList.add("hidden");
-                    }, 2500); // Increased duration for copy success message
-                }).catch(err => console.error('Could not copy text: ', err));
-            }
-        });
 
-        const earlyClasses = ['Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
-        const classMap = {
-            'Class 6': 7, 'Class 7': 6, 'Class 8': 5, 'Class 9': 4, 'Class 10': 3,
-            'Class 11': 2, 'Class 12': 1
-        };
+  <footer>
+    <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
+  </footer>
+<script>
+  document.getElementById("shareButton").addEventListener("click", function () {
+    const shareData = {
+      title: "Doctor Journey Calculator – India",
+      text: "Check out this cool tool to find how long it takes to become a doctor in India!",
+      url: window.location.href
+    };
 
-        let seriousGrade = null;
+    if (navigator.share) {
+      navigator.share(shareData).catch(err => console.error('Sharing failed:', err));
+    } else {
+      // Fallback for unsupported browsers
+      navigator.clipboard.writeText(shareData.url).then(() => {
+        document.getElementById("copySuccess").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("copySuccess").style.display = "none";
+        }, 2000);
+      });
+    }
+  });
+  const earlyClasses = ['Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
+const classMap = {
+  'Class 6': 7, 'Class 7': 6, 'Class 8': 5, 'Class 9': 4, 'Class 10': 3,
+  'Class 11': 2, 'Class 12': 1
+};
 
-        // Show class selection dropdown on button click
-        document.getElementById('revealClassSelect').onclick = () => {
-            document.getElementById('classSelectContainer').classList.remove('hidden');
-            document.getElementById('revealClassSelect').classList.add('hidden'); // Hide button after click
-        };
+let seriousGrade = null;
 
-        document.getElementById('classSelect').onchange = function () {
-            const selected = this.value;
-            const msg = document.getElementById('class-message');
+// Show class selection dropdown on button click
+document.getElementById('revealClassSelect').onclick = () => {
+  document.getElementById('classSelectContainer').classList.remove('hidden');
+};
 
-            if (!selected) {
-                msg.textContent = "";
-                return;
-            }
+document.getElementById('classSelect').onchange = function () {
+  const selected = this.value;
+  const msg = document.getElementById('class-message');
+  
+  if (!selected) {
+    msg.textContent = "";
+    return;
+  }
 
-            if (earlyClasses.includes(selected)) {
-                msg.textContent = "😅 Too early! Please choose Class 6 or onward to calculate your serious academic journey.";
-                document.getElementById('pathStep').classList.add('hidden'); // Hide path step if early class selected
-            } else {
-                seriousGrade = selected;
-                msg.textContent = `✔️ Great! You started serious academic preparation in ${selected}. Now, choose your medical path.`;
-                toggleDisplay('pathStep', true);
-                scrollToElement('pathStep');
-            }
-        };
+  if (earlyClasses.includes(selected)) {
+    msg.textContent = "😅 Too early! Count from Class 6 onward, please.";
+  } else {
+    seriousGrade = selected;
+    msg.textContent = `✔️ You got serious in ${selected}. Now choose your path.`;
+    toggleDisplay('startStep', false);
+    toggleDisplay('pathStep', true);
+    scrollToElement('pathStep');
+  }
+};
 
-        function toggleDisplay(id, show = true) {
-            document.getElementById(id).classList.toggle('hidden', !show);
-        }
+function toggleDisplay(id, show = true) {
+  document.getElementById(id).classList.toggle('hidden', !show);
+}
 
-        function scrollToElement(id) {
-            document.getElementById(id).scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+function scrollToElement(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
 
-        const paths = {
-            mbbs: { course: 5.5, pg: 3, optionalSS: true, ssLabel: 'Super-Specialty (DM/MCh)', ssMin: 2, ssMax: 3 },
-            bds: { course: 5, pg: 3, optionalSS: true, ssLabel: 'Fellowship/Clinical Practice', ssMin: 1, ssMax: 2 },
-            bams: { course: 5.5, pg: 3, optionalSS: false },
-            bhms: { course: 5.5, pg: 3, optionalSS: false }
-        };
+const paths = {
+  mbbs: { course: 5.5, pg: 3, optionalSS: true, ssLabel: 'Super‑Specialty (DM/MCh)', ssMin: 2, ssMax: 3 },
+  bds:  { course: 5,   pg: 3, optionalSS: true, ssLabel: 'Fellowship/Clinical Practice', ssMin: 1, ssMax: 2 },
+  bams: { course: 5.5, pg: 3, optionalSS: false },
+  bhms: { course: 5.5, pg: 3, optionalSS: false }
+};
 
-        function showForm() {
-            const p = document.getElementById('pathSelect').value;
-            const cfg = paths[p];
-            const formContainer = document.getElementById('formContainer');
-            const output = document.getElementById('output');
+function showForm() {
+  const p = document.getElementById('pathSelect').value;
+  const cfg = paths[p];
+  const formContainer = document.getElementById('formContainer');
+  const output = document.getElementById('output');
 
-            if (!cfg) {
-                formContainer.innerHTML = '';
-                output.classList.add('hidden'); // Hide output if no path selected
-                return;
-            }
+  if (!cfg) {
+    formContainer.innerHTML = '';
+    return;
+  }
 
-            const yearOptions = (count, selectedValue = 1) => {
-                let options = '';
-                for (let i = 1; i <= count; i++) {
-                    options += `<option value="${i}" ${i === selectedValue ? 'selected' : ''}>${i}</option>`;
-                }
-                return options;
-            };
+  const yearOptions = count => [...Array(count)].map((_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
 
-            let html = `
-                <p>Did you take a drop year after 12th grade before starting your medical course?</p>
-                <select id="drop12" onchange="toggle('dropYears12', this)">
-                    <option value="no">No</option><option value="yes">Yes</option>
-                </select>
-                <div id="dropYears12" class="hidden">
-                    <p>Number of drop years:</p>
-                    <select id="dropYears12Val">${yearOptions(5)}</select>
-                </div>
+  let html = `
+    <p>Took a drop after 12th?</p>
+    <select id="drop12" onchange="toggle('dropYears12', this)">
+      <option value="no">No</option><option value="yes">Yes</option>
+    </select>
+    <div id="dropYears12" style="display:none">
+      <select id="dropYears12Val">${yearOptions(5)}</select> year(s)
+    </div><br>
 
-                <p><strong>${p.toUpperCase()}</strong> course duration: ${cfg.course} years (including internship)</p>
+    <div>${p.toUpperCase()} duration: ${cfg.course} yrs (incl. internship)</div><br>
 
-                <p>Will you have a bond period after your course?</p>
-                <select id="bond" onchange="toggle('bondYears', this)">
-                    <option value="no">No</option><option value="yes">Yes</option>
-                </select>
-                <div id="bondYears" class="hidden">
-                    <p>Bond period duration:</p>
-                    <select id="bondYearsVal">${yearOptions(4)}</select>
-                </div>
+    <p>Did you have a bond period?</p>
+    <select id="bond" onchange="toggle('bondYears', this)">
+      <option value="no">No</option><option value="yes">Yes</option>
+    </select>
+    <div id="bondYears" style="display:none">
+      <select id="bondYearsVal">${yearOptions(4)}</select> year(s)
+    </div><br>
 
-                <p>Are you planning to pursue Post-Graduation (PG)?</p>
-                <select id="doPG" onchange="toggle('pgSection', this)">
-                    <option value="yes">Yes</option><option value="no">No</option>
-                </select>
+    <p>Planning to do PG?</p>
+    <select id="doPG" onchange="toggle('pgSection', this)">
+      <option value="yes">Yes</option><option value="no">No</option>
+    </select><br>
 
-                <div id="pgSection">
-                    <p>Did you take time off for PG preparation (e.g., entrance exams)?</p>
-                    <select id="pgDrop" onchange="toggle('pgDropYears', this)">
-                        <option value="no">No</option><option value="yes">Yes</option>
-                    </select>
-                    <div id="pgDropYears" class="hidden">
-                        <p>Number of PG drop years:</p>
-                        <select id="pgDropYearsVal">${yearOptions(5)}</select>
-                    </div>
-                    <p>PG duration: ${cfg.pg} years</p>
+    <div id="pgSection">
+      <p>Took time off for PG prep?</p>
+      <select id="pgDrop" onchange="toggle('pgDropYears', this)">
+        <option value="no">No</option><option value="yes">Yes</option>
+      </select>
+      <div id="pgDropYears" style="display:none">
+        <select id="pgDropYearsVal">${yearOptions(5)}</select> year(s)
+      </div><br>
+      <div>PG duration: ${cfg.pg} yrs</div><br>
 
-                    ${cfg.optionalSS ? `
-                    <p>Are you considering a ${cfg.ssLabel}?</p>
-                    <select id="ss" onchange="toggle('ssSection', this)">
-                        <option value="no">No</option><option value="yes">Yes</option>
-                    </select>
-                    <div id="ssSection" class="hidden">
-                        <p>Did you take a break before Super-Specialty?</p>
-                        <select id="ssDrop" onchange="toggle('ssDropYears', this)">
-                            <option value="no">No</option><option value="yes">Yes</option>
-                        </select>
-                        <div id="ssDropYears" class="hidden">
-                            <p>Number of SS drop years:</p>
-                            <select id="ssDropYearsVal">${yearOptions(5)}</select>
-                        </div>
-                        <p>Super-Specialty duration:</p>
-                        <select id="ssDur">${[...Array(cfg.ssMax - cfg.ssMin + 1)].map((_, i) => {
-                            const yr = cfg.ssMin + i;
-                            return `<option value="${yr}" ${yr === cfg.ssMin ? 'selected' : ''}>${yr} year(s)</option>`;
-                        }).join('')}</select>
-                    </div>` : ''}
-                </div>
+      ${cfg.optionalSS ? `
+      <p>Going for ${cfg.ssLabel}?</p>
+      <select id="ss" onchange="toggle('ssSection', this)">
+        <option value="no">No</option><option value="yes">Yes</option>
+      </select>
+      <div id="ssSection" style="display:none">
+        <p>Took a break before SS?</p>
+        <select id="ssDrop" onchange="toggle('ssDropYears', this)">
+          <option value="no">No</option><option value="yes">Yes</option>
+        </select>
+        <div id="ssDropYears" style="display:none">
+          <select id="ssDropYearsVal">${yearOptions(5)}</select> year(s)
+        </div>
+        <p>SS duration:</p>
+        <select id="ssDur">${[...Array(cfg.ssMax - cfg.ssMin + 1)].map((_, i) => {
+          const yr = cfg.ssMin + i;
+          return `<option value="${yr}">${yr}</option>`;
+        }).join('')}</select> year(s)
+      </div><br>` : ''}
+    </div>
 
-                <button class="calculate" onclick="calculate('${p}')">🚀 Calculate My Doctor Journey</button>
-            `;
+    <button class="calculate" onclick="calculate('${p}')">🚀 Calculate Total Time</button>
+  `;
 
-            formContainer.innerHTML = html;
-            output.classList.add('hidden'); // Hide output until calculated
-            scrollToElement('formContainer');
+  formContainer.innerHTML = html;
+  output.innerHTML = '';
+  scrollToElement('formContainer');
+}
 
-            // Initialize display based on default values for PG and SS
-            document.getElementById('pgSection').style.display = document.getElementById('doPG').value === 'yes' ? 'block' : 'none';
-            if (cfg.optionalSS) {
-                document.getElementById('ssSection').style.display = document.getElementById('ss').value === 'yes' ? 'block' : 'none';
-            }
-        }
+function toggle(id, el) {
+  document.getElementById(id).style.display = el.value === 'yes' ? 'block' : 'none';
+}
 
-        function toggle(id, el) {
-            document.getElementById(id).classList.toggle('hidden', el.value === 'no');
-        }
+function calculate(p) {
+  const cfg = paths[p];
+  let total = classMap[seriousGrade] || 0;
+  const output = document.getElementById('output');
+  let detail = '';
 
-        function calculate(p) {
-            const cfg = paths[p];
-            let totalYears = classMap[seriousGrade] || 0;
-            const output = document.getElementById('output');
-            let detail = 'Your estimated journey breakdown:';
+  if (document.getElementById('drop12')?.value === 'yes') {
+    total += +document.getElementById('dropYears12Val').value;
+  }
 
-            detail += `<br>• Schooling (Class ${seriousGrade} to 12): ${classMap[seriousGrade]} years`;
+  total += cfg.course;
 
-            if (document.getElementById('drop12')?.value === 'yes') {
-                const dropYears12 = +document.getElementById('dropYears12Val').value;
-                totalYears += dropYears12;
-                detail += `<br>• Drop year(s) before medical course: ${dropYears12} year(s)`;
-            }
+  if (document.getElementById('bond')?.value === 'yes') {
+    total += +document.getElementById('bondYearsVal').value;
+  }
 
-            totalYears += cfg.course;
-            detail += `<br>• ${p.toUpperCase()} Course: ${cfg.course} years`;
+  if (document.getElementById('doPG')?.value === 'yes') {
+    if (document.getElementById('pgDrop')?.value === 'yes') {
+      total += +document.getElementById('pgDropYearsVal').value;
+    }
+    total += cfg.pg;
 
-            if (document.getElementById('bond')?.value === 'yes') {
-                const bondYears = +document.getElementById('bondYearsVal').value;
-                totalYears += bondYears;
-                detail += `<br>• Bond Period: ${bondYears} year(s)`;
-            }
+    if (cfg.optionalSS && document.getElementById('ss')?.value === 'yes') {
+      if (document.getElementById('ssDrop')?.value === 'yes') {
+        total += +document.getElementById('ssDropYearsVal').value;
+      }
+      const ssDur = +document.getElementById('ssDur').value;
+      total += ssDur;
+      detail += `<br>+ ${cfg.ssLabel}: ${ssDur} yr(s)`;
+    }
+  }
 
-            if (document.getElementById('doPG')?.value === 'yes') {
-                if (document.getElementById('pgDrop')?.value === 'yes') {
-                    const pgDropYears = +document.getElementById('pgDropYearsVal').value;
-                    totalYears += pgDropYears;
-                    detail += `<br>• PG Entrance Prep/Drop: ${pgDropYears} year(s)`;
-                }
-                totalYears += cfg.pg;
-                detail += `<br>• Post-Graduation (PG): ${cfg.pg} years`;
+  output.innerHTML = `
+    <h2>🎉 Total Time via <strong>${p.toUpperCase()}</strong>: 
+      <span style="color:#4CAF50">${total.toFixed(1)} years</span>
+    </h2>${detail}
+  `;
+  scrollToElement('output');
+}
 
-                if (cfg.optionalSS && document.getElementById('ss')?.value === 'yes') {
-                    if (document.getElementById('ssDrop')?.value === 'yes') {
-                        const ssDropYears = +document.getElementById('ssDropYearsVal').value;
-                        totalYears += ssDropYears;
-                        detail += `<br>• SS Entrance Prep/Drop: ${ssDropYears} year(s)`;
-                    }
-                    const ssDur = +document.getElementById('ssDur').value;
-                    totalYears += ssDur;
-                    detail += `<br>• ${cfg.ssLabel}: ${ssDur} year(s)`;
-                }
-            }
 
-            output.innerHTML = `
-                <h2>🎉 Your Total Estimated Journey to Become a Doctor via <strong>${p.toUpperCase()}</strong>:</h2>
-                <span class="highlight">${totalYears.toFixed(1)} years</span>
-                <p style="font-size: 0.95rem; margin-top: 1.5rem; line-height: 1.8;">${detail}</p>
-            `;
-            output.classList.remove('hidden');
-            scrollToElement('output');
-        }
-    </script>
+</script>
+
 </body>
 </html>
