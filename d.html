@@ -294,24 +294,29 @@
         </a>
         <div class="flex items-center space-x-4">
             <!-- Chat Icon -->
-            <a href="/chat" class="header-icon-wrapper">
-                <!-- Chat SVG Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square text-gray-700">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <span class="icon-badge">3</span>
-            </a>
-            <!-- User Group Icon -->
-            <a href="/u" class="header-icon-wrapper">
-                <!-- Users SVG Icon -->
-                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users text-gray-700">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="9" cy="7" r="4"></circle>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                </svg>
-                <span class="icon-badge">+34</span>
-            </a>
+           <!-- Chat Icon -->
+<a href="/chat" class="relative flex items-center justify-center w-10 h-10 text-gray-700 hover:text-blue-600 transition">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+  </svg>
+  <span class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs font-semibold rounded-full w-5 h-5 flex items-center justify-center shadow">
+    3
+  </span>
+</a>
+
+<!-- User Group Icon -->
+<a href="/u" class="relative flex items-center justify-center w-10 h-10 text-gray-700 hover:text-blue-600 transition">
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+    <circle cx="9" cy="7" r="4"/>
+    <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+    <path d="M16 3.13a4 4 0 010 7.75"/>
+  </svg>
+  <span class="absolute -top-1.5 -right-1.5 bg-green-500 text-white text-xs font-semibold rounded-full w-6 h-5 px-1 flex items-center justify-center shadow">
+    +34
+  </span>
+</a>
+
         </div>
     </header>
 
