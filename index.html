@@ -1,468 +1,1431 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Doctor Journey Calculator – India</title>
-<style>/* Reset & Font */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Inter", "Segoe UI", sans-serif;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Journey Generator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* Pure white background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 1.5rem; /* Increased padding */
+            padding-top: 6.5rem; /* Space for the fixed header */
+            box-sizing: border-box;
+        }
+        .header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #ffffff;
+            z-index: 1000; /* Ensure it stays on top */
+            padding: 1rem 1.5rem; /* Padding inside the header */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4.5rem; /* Fixed height for the header */
+            box-sizing: border-box;
+        }
+        .header-logo {
+            height: 40px; /* Fixed height for logo */
+            object-fit: contain; /* Ensure logo fits without distortion */
+        }
+        .header-icon-wrapper {
+            position: relative;
+            cursor: pointer;
+            padding: 0.5rem; /* Make icons more tappable */
+            border-radius: 0.75rem; /* Rounded corners for touch area */
+            transition: background-color 0.2s ease-in-out;
+        }
+        .header-icon-wrapper:hover {
+            background-color: #f0f4f8; /* Light background on hover */
+        }
+        .icon-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444; /* Red color */
+            color: white;
+            border-radius: 9999px; /* Fully rounded */
+            padding: 0.15rem 0.5rem; /* Smaller padding for badge */
+            font-size: 0.75rem; /* Smaller font size */
+            font-weight: 600;
+            line-height: 1; /* Ensure text fits */
+        }
+        .container {
+            max-width: 550px; /* Slightly wider for a more spacious feel */
+            width: 100%;
+            background-color: aliceblue;
+            border-radius: 1.75rem; /* Consistent roundedness */
+            /* Advanced, multi-layered shadows for a floating, premium feel */
+            /* box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08), 0 5px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0,0,0,0.03); */
+            padding: 2.5rem; /* More generous padding */
+            transition: all 0.3s ease-in-out;
+            overflow: hidden;
+            border: 1px solid #e0e7ee; /* Very subtle, light border */
+        }
+        .form-screen {
+            display: none;
+            animation: fadeIn 0.5s ease-out forwards; /* Fade in animation, keep final state */
+        }
+        .form-screen.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); } /* More pronounced slide-up */
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #ffffff;
-  color: #1f2d3d;
-  font-size: 16px;
-  line-height: 1.6;
-  padding: 2rem 1rem;
-}
+        /* Progress Bar */
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e6f7ff; /* Lighter blue for track */
+            border-radius: 0.5rem;
+            height: 10px;
+            margin-bottom: 2rem; /* More space below */
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #00bfff, #1a73e8); /* Vibrant blue gradient */
+            border-radius: 0.5rem;
+            width: 0%;
+            transition: width 0.5s ease-in-out;
+        }
 
-/* Header */
-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 10px 20px;
-  background-color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 1000;
-}
+        .radio-option {
+            display: flex;
+            align-items: center;
+            padding: 1.1rem 1.4rem; /* More padding */
+            margin-bottom: 0.9rem; /* Consistent spacing */
+            background-color: #fafdff; /* Almost white with a hint of blue */
+            border-radius: 1.25rem; /* Softer roundedness */
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+            border: 1px solid #e8f0f7; /* Very subtle border */
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Finer, softer shadow */
+        }
+        .radio-option:hover {
+            background-color: #eef7ff; /* Light blue on hover */
+            border-color: #a7d3f2;
+            transform: translateY(-3px); /* More pronounced lift */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Stronger shadow on hover */
+        }
+        .radio-option input[type="radio"]:checked + span {
+            font-weight: 700; /* Bolder text for selected */
+            color: #1a73e8; /* Google Blue */
+        }
+        .radio-option input[type="radio"]:checked {
+            border-color: #1a73e8; /* Vibrant border for selected */
+            background-color: #e0f2fe; /* Lightest blue background */
+        }
+        .radio-option input[type="radio"] {
+            margin-right: 1.1rem; /* More space */
+            accent-color: #1a73e8; /* Google Blue for checkmark */
+            width: 1.5rem; /* Larger radio button */
+            height: 1.5rem; /* Larger radio button */
+            flex-shrink: 0;
+        }
 
-.header-left img {
-  height: 40px; /* Logo size */
-}
+        .button-primary {
+            /* Bold primary action - green */
+            background: #1877F2; /* Stronger green gradient */
+            color: white;
+            padding: 0.9rem 2.2rem; /* Reduced padding */
+            border-radius: 1.5rem; /* Consistent roundedness */
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.45); /* More prominent shadow */
+            border: none;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            letter-spacing: 0.025em; /* Slightly spaced letters */
+        }
+        .button-primary:hover {
+            transform: translateY(-4px); /* More lift */
+            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.6);
+        }
+        .button-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 12px rgba(76, 175, 80, 0.3);
+        }
 
-.header-right i {
-  font-size: 1.5rem;
-  margin-left: 20px;
-  cursor: pointer;
-  color: #333;
-}
+        .button-secondary {
+            /* Cool blue for secondary actions */
+            background-color: #e3f2fd;
+            color: #4a5568;
+            padding: 0.9rem 2.2rem; /* Reduced padding */
+            border-radius: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            letter-spacing: 0.015em;
+        }
+        .button-secondary:hover {
+            background-color: #bbdefb;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+        .button-secondary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
 
-.header-right i:hover {
-  color: #007BFF;
-}
+        .input-field {
+            border: 1px solid #dbe6f0; /* Softer border */
+            border-radius: 1rem;
+            padding: 1rem 1.4rem;
+            width: 100%;
+            margin-top: 0.8rem; /* More space */
+            background-color: #f8faff;
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            font-size: 1.05rem; /* Slightly larger font */
+            color: #333;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: #1a73e8; /* Google Blue focus */
+            box-shadow: 0 0 0 5px rgba(26, 115, 232, 0.25); /* Larger, softer focus shadow */
+            background-color: white;
+        }
+        .result-display {
+            font-size: 5rem; /* Even larger for main result */
+            font-weight: 800;
+            color: #1a365d; /* Dark blue, impactful */
+            margin-bottom: 2.8rem; /* More spacing */
+            text-align: center;
+            line-height: 1;
+            letter-spacing: -0.06em; /* Tighter for modern feel */
+            text-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle text shadow */
+        }
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.9rem 0; /* More padding */
+            border-bottom: 1px dashed #eef2f7; /* Very light dashed line */
+            font-size: 1rem; /* Clear font size */
+            color: #4a5568;
+        }
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+        .breakdown-item span:first-child {
+            flex-grow: 1;
+        }
+        .breakdown-item span:last-child {
+            font-weight: 600;
+            color: #2d3748;
+        }
 
-/* Main Container */
-.container {
-  max-width: 720px;
-  width: 100%;
-  background-color: aliceblue;
-  margin: auto;
-  padding: 2.5rem 2rem;
-  border-radius: 16px;
-  margin-top: 80px; /* Add space for the fixed header */
-}
+        .motivation-box {
+            background-color: #e6f7ff; /* Light, calming blue */
+            border: 2px dashed #89cff0; /* Dashed blue border */
+            border-radius: 1.25rem; /* Match other elements */
+            padding: 2rem; /* Generous padding */
+            margin-top: 2.5rem; /* More separation */
+            font-style: italic;
+            color: #2c5282;
+            text-align: center;
+            line-height: 1.7; /* Improved readability */
+            font-weight: 500;
+            box-shadow: 0 10px 25px rgba(137, 207, 240, 0.3); /* Softer, broader shadow */
+        }
+        .loading-spinner {
+            border: 5px solid #f3f3f3; /* Thicker */
+            border-top: 5px solid #1a73e8; /* Google blue, thicker */
+            border-radius: 50%;
+            width: 30px; /* Larger */
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto; /* More margin */
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
-/* Headings */
-h1 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: #0b2545;
-  text-align: center;
-}
-
-.lead {
-  text-align: center;
-  font-weight: 500;
-  color: #5a5a5a;
-  margin-bottom: 2rem;
-}
-
-h2 {
-  font-size: 1.5rem;
-  margin: 1.5rem 0 1rem;
-  color: #1a1a1a;
-}
-
-/* Paragraphs & Messages */
-p {
-  margin: 1rem 0 0.5rem;
-  font-weight: 500;
-}
-
-#class-message {
-  margin-top: 0.5rem;
-  color: #5a5a5a;
-  font-style: italic;
-}
-
-/* Buttons & Selects */
-button,
-select {
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border-radius: 8px;
-  border: 1px solid #d0d7de;
-  background-color: #e6ecf2;
-  color: #1f2d3d;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover,
-select:hover {
-  background-color: #d3dce6;
-}
-
-button.calculate {
-  background-color: #0b2545;
-  color: #ffffff;
-  border: none;
-  margin-top: 1rem;
-}
-
-button.calculate:hover {
-  background-color: #103b65;
-}
-
-select {
-  width: 100%;
-  margin-top: 1rem;
-}
-
-/* Output Section */
-#output {
-  background-color: #f1f4f8;
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin-top: 2rem;
-  color: #0b2545;
-  font-weight: 600;
-  border-left: 5px solid #0b2545;
-}
-
-/* Hidden Utility */
-.hidden {
-  display: none;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  margin-top: auto;
-  padding: 1rem 0;
-  font-size: 0.85rem;
-  color: #999;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  body {
-    padding: 1rem;
-  }
-
-  .container {
-    padding: 15vh 1rem;
-  }
-
-  h1 {
-    font-size: 1.6rem;
-  }
-
-  h2 {
-    font-size: 1.25rem;
-  }
-
-  button,
-  select {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-}
-</style>  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- Include FontAwesome for icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+        /* General Heading and Paragraph Styles */
+        h1, h2 {
+            color: #2d3748; /* Darker text for headings */
+            font-weight: 800; /* Extra bold */
+        }
+        h3 {
+            color: #384252; /* Slightly softer for sub-headings */
+            font-weight: 700;
+            margin-bottom: 1.2rem; /* Consistent spacing */
+        }
+        p.text-gray-600 {
+            color: #5a677a; /* Good contrast for main text */
+            font-size: 1.05rem; /* Slightly larger */
+        }
+        p.text-gray-500 {
+            color: #718096; /* Lighter for secondary info */
+            font-size: 0.95rem;
+        }
+        p#q1-conditional-response {
+            background-color: #f0f8ff; /* Lighter tint */
+            border: 1px solid #d4e8f7; /* Soft border */
+            color: #2a65ad; /* Deeper blue */
+            padding: 1.2rem;
+            border-radius: 1rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+    </style>
 </head>
-<body>
-  <!-- Header with logo, chat icon, and notification icon -->
-  <header style="position: fixed; top: 0; left: 0; width: 100%; padding: 10px 20px; background-color: #fff;  display: flex; justify-content: space-between; align-items: center; z-index: 1000;">
-   <div class="header-left">
-  <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="Logo" class="logo" style="height: 40px; border-radius: 8px;" />
-</div>
-<div class="header-right" style="display: flex; align-items: center;">
-  <!-- Message Icon with count -->
-  <div style="position: relative; margin-left: 10px;">
-    <a href="https://clavikl.com/chat">
-      <i class="fa fa-comment" aria-hidden="true" style="font-size: 1.5rem; cursor: pointer; color: #333;"></i>
-    </a>
-    <span style="position: absolute; top: -3px; right: -3px; background-color: red; color: white; border-radius: 50%; padding: 1px 4px; font-size: 0.6rem; font-weight: bold;">3</span>
-  </div>
+<body class="flex items-center justify-center min-h-screen">
+    <!-- Sticky Header -->
+    <header class="header-fixed">
+        <a href="/">
+            <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="App Logo" class="header-logo">
+        </a>
+        <div class="flex items-center space-x-4">
+       <!-- CHAT ICON -->
+<a href="/chat" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 transition">
+  <!-- Messenger-like SVG inside a circular button -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M12 2C6.48 2 2 6.04 2 11c0 2.21.93 4.23 2.47 5.74L4 22l4.6-2.42c1.1.31 2.27.47 3.4.47 5.52 0 10-4.04 10-9s-4.48-9-10-9zm1.95 10.45l-2.6-1.96a.75.75 0 0 0-.94.02l-3.72 3.02 2.6-3.9a.75.75 0 0 1 1.04-.21l2.6 1.96a.75.75 0 0 0 .94-.02l3.72-3.02-2.6 3.9a.75.75 0 0 1-1.04.21z"/>
+  </svg>
+  <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-semibold rounded-full w-5 h-5 flex items-center justify-center shadow">
+    3
+  </span>
+</a>
 
-  <!-- Notification Icon with count -->
-  <div style="position: relative; margin-left: 10px;">
-    <a href="https://clavikl.com/u/">
-      <i class="fa fa-bell" aria-hidden="true" style="font-size: 1.5rem; cursor: pointer; color: #333;"></i>
-    </a>
-    <span style="position: absolute; top: -3px; right: -3px; background-color: red; color: white; border-radius: 50%; padding: 1px 4px; font-size: 0.6rem; font-weight: bold;">7</span>
-  </div>
-</div>
-
-</div>
-
-  </header>
-
-  <!-- Main content container -->
-  <main class="container" style="margin-top: 80px;">
-    <!-- Title and tagline moved to the main section -->
-    <section class="intro">
-      <h1>How long to become a doctor?</h1>
-      <p class="lead">Let’s figure out when you'll officially become a doctor in India.</p>
-    </section>
-
-    <section id="startStep" class="card">
-      <h2>When did your academic journey begin?</h2>
-      <button id="revealClassSelect" class="calculate">Select Starting Class</button>
-      <div id="classSelectContainer" class="hidden" style="margin-top: 1rem;">
-        <select id="classSelect">
-          <option value="">-- Choose Class --</option>
-          <option value="Nursery">Nursery</option>
-          <option value="LKG">LKG</option>
-          <option value="UKG">UKG</option>
-          <option value="Class 1">Class 1</option>
-          <option value="Class 2">Class 2</option>
-          <option value="Class 3">Class 3</option>
-          <option value="Class 4">Class 4</option>
-          <option value="Class 5">Class 5</option>
-          <option value="Class 6">Class 6</option>
-          <option value="Class 7">Class 7</option>
-          <option value="Class 8">Class 8</option>
-          <option value="Class 9">Class 9</option>
-          <option value="Class 10">Class 10</option>
-          <option value="Class 11">Class 11</option>
-          <option value="Class 12">Class 12</option>
-        </select>
-      </div>
-      <div id="class-message" class="message"></div>
-    </section>
-
-    <section id="pathStep" class="card hidden">
-      <h2>Select Your Medical Path</h2>
-      <select id="pathSelect" onchange="showForm()">
-        <option value="">-- Select Path --</option>
-        <option value="mbbs">MBBS</option>
-        <option value="bds">BDS</option>
-        <option value="bams">BAMS</option>
-        <option value="bhms">BHMS</option>
-      </select>
-      <div id="formContainer" class="form-container"></div>
-    </section>
-
-    <section id="output" class="output"></section>
-  </main>
-
-  <section class="share-section" style="text-align: center; margin: 2rem auto;">
-  <p style="margin-bottom: 0.5rem;">Enjoyed this tool? Share it with your friends!</p>
-  <button id="shareButton" class="calculate" style="padding: 10px 20px; font-size: 1rem; cursor: pointer;">
-    <i class="fas fa-share-alt" style="margin-right: 5px;"></i> Share This
-  </button>
-  <p id="copySuccess" style="display: none; font-size: 0.9rem; color: green; margin-top: 0.5rem;">Link copied to clipboard!</p>
-</section>
+<!-- USERS ICON -->
+<a href="/u" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 transition ml-2">
+  <!-- Modern users icon -->
+  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 2.03 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+  </svg>
+  <span class="absolute -top-1 -right-1 bg-green-500 text-white text-[10px] font-semibold rounded-full w-5 h-5 flex items-center justify-center shadow">
+    +34
+  </span>
+</a>
 
 
-  <footer>
-    <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
-  </footer>
-<script>
-  document.getElementById("shareButton").addEventListener("click", function () {
-    const shareData = {
-      title: "Doctor Journey Calculator – India",
-      text: "Check out this cool tool to find how long it takes to become a doctor in India!",
-      url: window.location.href
-    };
 
-    if (navigator.share) {
-      navigator.share(shareData).catch(err => console.error('Sharing failed:', err));
-    } else {
-      // Fallback for unsupported browsers
-      navigator.clipboard.writeText(shareData.url).then(() => {
-        document.getElementById("copySuccess").style.display = "block";
-        setTimeout(() => {
-          document.getElementById("copySuccess").style.display = "none";
-        }, 2000);
-      });
-    }
-  });
-  const earlyClasses = ['Nursery', 'LKG', 'UKG', 'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'];
-const classMap = {
-  'Class 6': 7, 'Class 7': 6, 'Class 8': 5, 'Class 9': 4, 'Class 10': 3,
-  'Class 11': 2, 'Class 12': 1
-};
-
-let seriousGrade = null;
-
-// Show class selection dropdown on button click
-document.getElementById('revealClassSelect').onclick = () => {
-  document.getElementById('classSelectContainer').classList.remove('hidden');
-};
-
-document.getElementById('classSelect').onchange = function () {
-  const selected = this.value;
-  const msg = document.getElementById('class-message');
-  
-  if (!selected) {
-    msg.textContent = "";
-    return;
-  }
-
-  if (earlyClasses.includes(selected)) {
-    msg.textContent = "😅 Too early! Count from Class 6 onward, please.";
-  } else {
-    seriousGrade = selected;
-    msg.textContent = `✔️ You got serious in ${selected}. Now choose your path.`;
-    toggleDisplay('startStep', false);
-    toggleDisplay('pathStep', true);
-    scrollToElement('pathStep');
-  }
-};
-
-function toggleDisplay(id, show = true) {
-  document.getElementById(id).classList.toggle('hidden', !show);
-}
-
-function scrollToElement(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
-
-const paths = {
-  mbbs: { course: 5.5, pg: 3, optionalSS: true, ssLabel: 'Super‑Specialty (DM/MCh)', ssMin: 2, ssMax: 3 },
-  bds:  { course: 5,   pg: 3, optionalSS: true, ssLabel: 'Fellowship/Clinical Practice', ssMin: 1, ssMax: 2 },
-  bams: { course: 5.5, pg: 3, optionalSS: false },
-  bhms: { course: 5.5, pg: 3, optionalSS: false }
-};
-
-function showForm() {
-  const p = document.getElementById('pathSelect').value;
-  const cfg = paths[p];
-  const formContainer = document.getElementById('formContainer');
-  const output = document.getElementById('output');
-
-  if (!cfg) {
-    formContainer.innerHTML = '';
-    return;
-  }
-
-  const yearOptions = count => [...Array(count)].map((_, i) => `<option value="${i + 1}">${i + 1}</option>`).join('');
-
-  let html = `
-    <p>Took a drop after 12th?</p>
-    <select id="drop12" onchange="toggle('dropYears12', this)">
-      <option value="no">No</option><option value="yes">Yes</option>
-    </select>
-    <div id="dropYears12" style="display:none">
-      <select id="dropYears12Val">${yearOptions(5)}</select> year(s)
-    </div><br>
-
-    <div>${p.toUpperCase()} duration: ${cfg.course} yrs (incl. internship)</div><br>
-
-    <p>Did you have a bond period?</p>
-    <select id="bond" onchange="toggle('bondYears', this)">
-      <option value="no">No</option><option value="yes">Yes</option>
-    </select>
-    <div id="bondYears" style="display:none">
-      <select id="bondYearsVal">${yearOptions(4)}</select> year(s)
-    </div><br>
-
-    <p>Planning to do PG?</p>
-    <select id="doPG" onchange="toggle('pgSection', this)">
-      <option value="yes">Yes</option><option value="no">No</option>
-    </select><br>
-
-    <div id="pgSection">
-      <p>Took time off for PG prep?</p>
-      <select id="pgDrop" onchange="toggle('pgDropYears', this)">
-        <option value="no">No</option><option value="yes">Yes</option>
-      </select>
-      <div id="pgDropYears" style="display:none">
-        <select id="pgDropYearsVal">${yearOptions(5)}</select> year(s)
-      </div><br>
-      <div>PG duration: ${cfg.pg} yrs</div><br>
-
-      ${cfg.optionalSS ? `
-      <p>Going for ${cfg.ssLabel}?</p>
-      <select id="ss" onchange="toggle('ssSection', this)">
-        <option value="no">No</option><option value="yes">Yes</option>
-      </select>
-      <div id="ssSection" style="display:none">
-        <p>Took a break before SS?</p>
-        <select id="ssDrop" onchange="toggle('ssDropYears', this)">
-          <option value="no">No</option><option value="yes">Yes</option>
-        </select>
-        <div id="ssDropYears" style="display:none">
-          <select id="ssDropYearsVal">${yearOptions(5)}</select> year(s)
         </div>
-        <p>SS duration:</p>
-        <select id="ssDur">${[...Array(cfg.ssMax - cfg.ssMin + 1)].map((_, i) => {
-          const yr = cfg.ssMin + i;
-          return `<option value="${yr}">${yr}</option>`;
-        }).join('')}</select> year(s)
-      </div><br>` : ''}
+    </header>
+
+    <div id="calculator-container" class="container">
+
+        <!-- Progress Bar (Visible on all form screens) -->
+        <div class="progress-bar-container">
+            <div id="progressBar" class="progress-bar"></div>
+        </div>
+
+        <!-- Screen 1: Welcome & Initial Assessment -->
+        <div id="screen1" class="form-screen active">
+  <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-4 leading-tight">
+  How Long 'Til You're a Doctor? 🧠💉
+</h1>
+<p class="text-md md:text-lg text-center text-gray-600 mb-8">
+  Let’s calculate your legendary grind from “I got this” to “Paging Dr. You”
+</p>
+
+
+            <h3 class="text-xl font-semibold text-gray-700 mb-4">When did the doctor-y feeling first hit you?</h3>
+            <div class="space-y-4 mb-6"> <!-- Increased space -->
+                <label class="radio-option">
+                    <input type="radio" name="startPoint" value="kindergarten" class="hidden">
+                    <span>Nursery/Kindergarten</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="startPoint" value="primary" class="hidden">
+                    <span>Primary School (Grades 1-5)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="startPoint" value="middle" class="hidden">
+                    <span>Middle School (Grades 6-8)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="startPoint" value="high" class="hidden">
+                    <span>High School (Grades 9-10)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="startPoint" value="after12th" class="hidden">
+                    <span>After 12th Grade</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="startPoint" value="pursuing" class="hidden">
+                    <span>Already pursuing a medical course</span>
+                </label>
+            </div>
+            <p id="q1-conditional-response" class="text-sm italic hidden"></p>
+
+            <div class="flex justify-end pt-5"> <!-- More padding -->
+                <button onclick="nextStep()" class="button-primary">Next</button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Choosing Your Path -->
+        <div id="screen2" class="form-screen">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+  Choose What You’re Gonna Flex 💪🩺
+</h2>
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+  MBBS, BDS, BAMS, or BHMS — what’s your doc path flex?
+</h3>
+
+            <div class="space-y-4 mb-6"> <!-- Increased space -->
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="MBBS" class="hidden">
+                    <span>MBBS (Human Whisperer)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="BDS" class="hidden">
+                    <span>BDS (Tooth Wizard)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="BAMS" class="hidden">
+                    <span>BAMS (Ancient Healer)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="BHMS" class="hidden">
+                    <span>BHMS (Tiny Dose Guru)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="BUMS" class="hidden">
+                    <span>BUMS (Unani Master)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="BSMS" class="hidden">
+                    <span>BSMS (Siddha Sage)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="BVSc" class="hidden">
+                    <span>BVSc (Animal Avenger)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="medicalBranch" value="other" class="hidden">
+                    <span>Something else?</span>
+                </label>
+            </div>
+            <div class="flex justify-between pt-5"> <!-- More padding -->
+                <button onclick="prevStep()" class="button-secondary">Back</button>
+                <button onclick="nextStep()" class="button-primary">Next</button>
+            </div>
+        </div>
+
+        <!-- Screen 3: Pre-Medical Journey (Conditional) -->
+        <div id="screen3" class="form-screen">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+  The Prep-School Power-Up 💥📚
+</h2>
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+  Took a gap year (or five) to level up before MBBS?
+</h3>
+
+            <div class="space-y-4 mb-6"> <!-- Increased space -->
+                <label class="radio-option">
+                    <input type="radio" name="gapYearsPreUG" value="0" class="hidden" checked>
+                    <span>No Break</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="gapYearsPreUG" value="1" class="hidden">
+                    <span>Yes, 1 Year</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="gapYearsPreUG" value="2" class="hidden">
+                    <span>Yes, 2 Years</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="gapYearsPreUG" value="3plus" class="hidden">
+                    <span>Yes, 3+ Years</span>
+                </label>
+                <input type="number" id="gapYearsPreUGInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 3, 4)" min="3">
+            </div>
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+  How many attempts did it take to slay the NEET boss? 🧠⚔️
+</h3>
+
+            <div class="space-y-4 mb-6"> <!-- Increased space -->
+                <label class="radio-option">
+                    <input type="radio" name="examAttempts" value="1" class="hidden" checked>
+                    <span>1st Try (You're a genius!)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="examAttempts" value="2" class="hidden">
+                    <span>2nd Try (+1 year, still awesome!)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="examAttempts" value="3" class="hidden">
+                    <span>3rd Try (+2 years, a true warrior!)</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="examAttempts" value="morethan3" class="hidden">
+                    <span>More than 3 tries (You never give up!)</span>
+                </label>
+                <input type="number" id="examAttemptsInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 3, 4)" min="3">
+            </div>
+
+            <div class="flex justify-between pt-5"> <!-- More padding -->
+                <button onclick="prevStep()" class="button-secondary">Back</button>
+                <button onclick="nextStep()" class="button-primary">Next</button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Undergraduate (UG) Course Details -->
+        <div id="screen4" class="form-screen">
+<h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+  Your Core Healing Degree: Level 1 🩺🎓
+</h2>
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+  How long did your UG journey take — including the legendary internship?
+</h3>
+<p class="text-sm text-gray-500 mb-2">
+  We've added the usual timeline, but feel free to adjust if COVID, strikes, or unexpected detours came your way.
+</p>
+<input type="number" id="ugCourseDuration" class="input-field mb-6" step="0.5" min="0" value="5.5">
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+  Any surprise breaks during UG? (COVID chaos, university strikes, or life doing its thing?)
+</h3>
+
+            <div class="space-y-4 mb-6"> <!-- Increased space -->
+                <label class="radio-option">
+                    <input type="radio" name="ugDelays" value="0" class="hidden" checked>
+                    <span>No Breaks</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="ugDelays" value="0.5" class="hidden">
+                    <span>Approx. 6 months</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="ugDelays" value="1" class="hidden">
+                    <span>Approx. 1 year</span>
+                </label>
+                <label class="radio-option">
+                    <input type="radio" name="ugDelays" value="morethan1" class="hidden">
+                    <span>More than 1 year</span>
+                </label>
+                <input type="number" id="ugDelaysInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 1.5, 2)" step="0.5" min="1.5">
+            </div>
+
+         <h3 class="text-xl font-semibold text-gray-700 mb-4">
+  Post-grad dreams or peace-of-mind plans?
+</h3>
+<div class="space-y-4 mb-6">
+  <label class="radio-option">
+    <input type="radio" name="planPG" value="yes" class="hidden" checked>
+    <span>Yes, PG here I come — one more round of sleepless nights!</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" name="planPG" value="maybe" class="hidden">
+    <span>Maybe... need a break, a plan, or just a nap first.</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" name="planPG" value="no" class="hidden">
+    <span>Nope, clinic > classroom. Heading straight to practice!</span>
+  </label>
+
+            </div>
+
+            <div class="flex justify-between pt-5"> <!-- More padding -->
+                <button onclick="prevStep()" class="button-secondary">Back</button>
+                <button onclick="nextStep()" class="button-primary">Next</button>
+            </div>
+        </div>
+
+        <!-- Screen 5: Post-Graduation (PG) Details (Optional) -->
+        <div id="screen5" class="form-screen">
+            <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
+  Ready to Unlock Specialization Powers? 🧠✨
+</h2>
+
+<div id="pg-details-section">
+  <h3 class="text-xl font-semibold text-gray-700 mb-4">
+    Took a breather (or burnout recovery) before PG prep? <span class="font-bold text-blue-600">Be honest</span> — no judgment.
+  </h3>
+  <div class="space-y-4 mb-6">
+    <label class="radio-option">
+      <input type="radio" name="gapYearsPrePG" value="0" class="hidden" checked>
+      <span>No Break — jumped in right after UG</span>
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="gapYearsPrePG" value="1" class="hidden">
+      <span>Yep, took 1 year to prep (and maybe cry a little)</span>
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="gapYearsPrePG" value="2" class="hidden">
+      <span>2 years — focus mode, coaching, caffeine overload</span>
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="gapYearsPrePG" value="3plus" class="hidden">
+      <span>3+ years — it’s a journey, not a race</span>
+    </label>
+    <input type="number" id="gapYearsPrePGInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 3, 4)" min="3">
+  </div>
+
+               <h3 class="text-xl font-semibold text-gray-700 mb-4">
+  How long was your PG phase — the great sequel to UG?
+</h3>
+<input type="number" id="pgCourseDuration" class="input-field mb-6" step="0.5" min="0" value="3">
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+  Did PG go smoothly, or did life throw in some delays?
+</h3>
+<div class="space-y-4 mb-6">
+  <label class="radio-option">
+    <input type="radio" name="pgDelays" value="0" class="hidden" checked>
+    <span>No Breaks</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" name="pgDelays" value="0.5" class="hidden">
+    <span>Approx. 6 months</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" name="pgDelays" value="1" class="hidden">
+    <span>Approx. 1 year</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" name="pgDelays" value="morethan1" class="hidden">
+    <span>More than 1 year</span>
+  </label>
+  <input type="number" id="pgDelaysInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 1.5, 2)" step="0.5" min="1.5">
+</div>
+
+<h3 class="text-xl font-semibold text-gray-700 mb-4">
+  Thinking of going further with Super Specialization?
+</h3>
+<div class="space-y-4 mb-6">
+  <label class="radio-option">
+    <input type="radio" name="planSS" value="yes" class="hidden" checked>
+    <span>Yes, bring on SS — one more round of brain marathon!</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" name="planSS" value="maybe" class="hidden">
+    <span>Maybe... still recovering from PG trauma.</span>
+  </label>
+  <label class="radio-option">
+    <input type="radio" name="planSS" value="no" class="hidden">
+    <span>Nope, white coat on — heading to the real world!</span>
+  </label>
+</div>
+</div>
+
+<div class="flex justify-between pt-5">
+  <button onclick="prevStep()" class="button-secondary">Back</button>
+  <button onclick="nextStep()" class="button-primary">Next</button>
+</div>
+</div>
+
+<!-- Screen 6: Super Specialization (SS) / Further Studies (Optional) -->
+<div id="screen6" class="form-screen">
+  <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">Ultimate Power-Up: Super Specialization! 🧬</h2>
+
+  <div id="ss-details-section">
+    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+      Did you take a breather before jumping into SS prep?
+    </h3>
+    <div class="space-y-4 mb-6">
+      <label class="radio-option">
+        <input type="radio" name="gapYearsPreSS" value="0" class="hidden" checked>
+        <span>No Break</span>
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="gapYearsPreSS" value="1" class="hidden">
+        <span>Yes, 1 Year</span>
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="gapYearsPreSS" value="2" class="hidden">
+        <span>Yes, 2 Years</span>
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="gapYearsPreSS" value="3plus" class="hidden">
+        <span>Yes, 3+ Years</span>
+      </label>
+      <input type="number" id="gapYearsPreSSInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 3, 4)" min="3">
     </div>
 
-    <button class="calculate" onclick="calculate('${p}')">🚀 Calculate Total Time</button>
-  `;
+    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+      How long did SS training last — the final academic boss fight?
+    </h3>
+    <input type="number" id="ssCourseDuration" class="input-field mb-6" step="0.5" min="0" value="3">
 
-  formContainer.innerHTML = html;
-  output.innerHTML = '';
-  scrollToElement('formContainer');
-}
+    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+      Any delays during SS — strikes, burnout, or syllabus drama?
+    </h3>
+    <div class="space-y-4 mb-6">
+      <label class="radio-option">
+        <input type="radio" name="ssDelays" value="0" class="hidden" checked>
+        <span>No Breaks</span>
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="ssDelays" value="0.5" class="hidden">
+        <span>Approx. 6 months</span>
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="ssDelays" value="1" class="hidden">
+        <span>Approx. 1 year</span>
+      </label>
+      <label class="radio-option">
+        <input type="radio" name="ssDelays" value="morethan1" class="hidden">
+        <span>More than 1 year</span>
+      </label>
+      <input type="number" id="ssDelaysInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 1.5, 2)" step="0.5" min="1.5">
+    </div>
+  </div>
 
-function toggle(id, el) {
-  document.getElementById(id).style.display = el.value === 'yes' ? 'block' : 'none';
-}
+  <div class="flex justify-between pt-5">
+    <button onclick="prevStep()" class="button-secondary">Back</button>
+    <button onclick="calculateJourney()" class="button-primary">Generate My Journey!</button>
+  </div>
+</div>
 
-function calculate(p) {
-  const cfg = paths[p];
-  let total = classMap[seriousGrade] || 0;
-  const output = document.getElementById('output');
-  let detail = '';
+<!-- Screen 7: Result Page -->
+<div id="screen7" class="form-screen">
+  <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">Your Legendary Doctor Journey Generated! 🎉</h2>
+  <div class="result-display" id="total-years-display"></div>
 
-  if (document.getElementById('drop12')?.value === 'yes') {
-    total += +document.getElementById('dropYears12Val').value;
-  }
+  <h3 class="text-xl font-semibold text-gray-700 mb-4">Your Path to Glory Unveiled:</h3>
+  <div id="breakdown-section" class="space-y-2 mb-8 text-gray-700">
+    <!-- Breakdown items will be inserted here by JavaScript -->
+  </div>
 
-  total += cfg.course;
+  <div class="flex flex-col space-y-4 mb-6">
+    <button onclick="shareJourney()" class="button-primary">Share My Epic Journey!</button>
+    <div id="copyMessage" class="text-center text-sm text-green-700 hidden">Link copied to clipboard!</div>
+    <button onclick="getMotivation()" class="button-primary">Get Super Motivation! ✨ (Powered by AI Magic!)</button>
+    <div class="loading-spinner" id="motivationSpinner"></div>
+    <div id="motivationMessage" class="motivation-box hidden"></div>
+  </div>
 
-  if (document.getElementById('bond')?.value === 'yes') {
-    total += +document.getElementById('bondYearsVal').value;
-  }
-
-  if (document.getElementById('doPG')?.value === 'yes') {
-    if (document.getElementById('pgDrop')?.value === 'yes') {
-      total += +document.getElementById('pgDropYearsVal').value;
-    }
-    total += cfg.pg;
-
-    if (cfg.optionalSS && document.getElementById('ss')?.value === 'yes') {
-      if (document.getElementById('ssDrop')?.value === 'yes') {
-        total += +document.getElementById('ssDropYearsVal').value;
-      }
-      const ssDur = +document.getElementById('ssDur').value;
-      total += ssDur;
-      detail += `<br>+ ${cfg.ssLabel}: ${ssDur} yr(s)`;
-    }
-  }
-
-  output.innerHTML = `
-    <h2>🎉 Total Time via <strong>${p.toUpperCase()}</strong>: 
-      <span style="color:#4CAF50">${total.toFixed(1)} years</span>
-    </h2>${detail}
-  `;
-  scrollToElement('output');
-}
+  <p class="text-center text-md text-gray-600 mb-4">Want to generate <span class="font-bold">another</span> legendary journey?</p>
+  <div class="flex justify-center">
+    <button onclick="startNewCalculation()" class="button-secondary">Start New Journey</button>
+  </div>
+</div>
 
 
-</script>
+            <p class="text-sm text-center text-gray-500 mt-8">    <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
+</p>
+        </div>
 
+    </div>
+
+    <script>
+        // Global state object to store user inputs and current step
+        const state = {
+            currentScreen: 1,
+            startPoint: '',
+            medicalBranch: '',
+            gapYearsPreUG: 0,
+            examAttempts: 0,
+            ugCourseDuration: 0,
+            ugDelays: 0,
+            planPG: 'yes', // Default to yes for conditional display
+            gapYearsPrePG: 0,
+            pgCourseDuration: 0,
+            pgDelays: 0,
+            planSS: 'yes', // Default to yes for conditional display
+            gapYearsPreSS: 0,
+            ssCourseDuration: 0,
+            ssDelays: 0,
+            totalScreens: 6 // Total number of interactive screens before result (1-6)
+        };
+
+        // References to DOM elements
+        const screens = document.querySelectorAll('.form-screen');
+        const q1ConditionalResponse = document.getElementById('q1-conditional-response');
+        const gapYearsPreUGInput = document.getElementById('gapYearsPreUGInput');
+        const examAttemptsInput = document.getElementById('examAttemptsInput');
+        const ugCourseDurationInput = document.getElementById('ugCourseDuration');
+        const ugDelaysInput = document.getElementById('ugDelaysInput');
+        const pgDetailsSection = document.getElementById('pg-details-section');
+        const gapYearsPrePGInput = document.getElementById('gapYearsPrePGInput');
+        const pgCourseDurationInput = document.getElementById('pgCourseDuration');
+        const pgDelaysInput = document.getElementById('pgDelaysInput');
+        const ssDetailsSection = document.getElementById('ss-details-section');
+        const gapYearsPreSSInput = document.getElementById('gapYearsPreSSInput');
+        const ssCourseDurationInput = document.getElementById('ssCourseDuration');
+        const ssDelaysInput = document.getElementById('ssDelaysInput');
+        const totalYearsDisplay = document.getElementById('total-years-display');
+        const breakdownSection = document.getElementById('breakdown-section');
+        const copyMessage = document.getElementById('copyMessage');
+        const motivationMessage = document.getElementById('motivationMessage');
+        const motivationSpinner = document.getElementById('motivationSpinner');
+        const progressBar = document.getElementById('progressBar');
+
+
+        // Map for UG course durations (added BVSc)
+        const ugDurations = {
+            MBBS: 5.5,
+            BDS: 5,
+            BAMS: 5.5,
+            BHMS: 5.5,
+            BUMS: 5.5,
+            BSMS: 5.5,
+            BVSc: 5.5 // Bachelor of Veterinary Science & A.H.
+        };
+
+
+        function showCurrentScreen() {
+            screens.forEach((screen, index) => {
+                if (index + 1 === state.currentScreen) {
+                    screen.classList.add('active');
+                    screen.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    screen.classList.remove('active');
+                }
+            });
+            updateProgressBar();
+        }
+
+ 
+        function updateProgressBar() {
+            let progress = 0;
+            // The progress bar should only reflect progress through the initial input screens (1-6)
+            if (state.currentScreen <= state.totalScreens) {
+                progress = (state.currentScreen / state.totalScreens) * 100;
+            } else if (state.currentScreen === 7) {
+                progress = 100; // Result screen means completion
+            }
+            progressBar.style.width = `${progress}%`;
+        }
+
+
+
+        function updateRadioState(name, stateKey) {
+            const selectedRadio = document.querySelector(`input[name="${name}"]:checked`);
+            if (selectedRadio) {
+                state[stateKey] = selectedRadio.value;
+            }
+        }
+
+        function updateNumberInputState(id, stateKey) {
+            const inputElement = document.getElementById(id);
+            if (inputElement && inputElement.value !== '') {
+                state[stateKey] = parseFloat(inputElement.value);
+            }
+        }
+
+
+        function nextStep() {
+            // Save current screen's data before moving
+            saveScreenData(state.currentScreen);
+
+            // Determine the next screen based on conditional logic
+            let nextScreenNum = state.currentScreen + 1;
+
+            if (state.currentScreen === 1) {
+                if (state.startPoint === 'pursuing') {
+                    nextScreenNum = 4; // Skip pre-medical journey if already pursuing/completed
+                }
+            } else if (state.currentScreen === 4) {
+                // If user chose not to plan PG or maybe later, skip to result
+                if (state.planPG === 'no' || state.planPG === 'maybe') {
+                    nextScreenNum = 7;
+                }
+            } else if (state.currentScreen === 5) {
+                // If user chose not to plan SS or maybe later, skip to result
+                if (state.planSS === 'no' || state.planSS === 'maybe') {
+                    nextScreenNum = 7;
+                }
+            }
+
+            state.currentScreen = nextScreenNum;
+            showCurrentScreen();
+            updateDynamicElements(); // Update elements based on new state/screen
+        }
+
+        function prevStep() {
+            let prevScreenNum = state.currentScreen - 1;
+
+            if (state.currentScreen === 7) { // Coming back from result screen
+                // Determine which screen led to the result
+                if (state.planSS === 'yes' && state.planPG === 'yes') {
+                    prevScreenNum = 6;
+                } else if (state.planPG === 'yes') {
+                    prevScreenNum = 5;
+                } else { // No PG or SS was planned, so came from screen 4
+                    prevScreenNum = 4;
+                }
+            } else if (state.currentScreen === 4 && state.startPoint === 'pursuing') {
+                prevScreenNum = 2; // If they skipped pre-medical journey, go back to branch selection
+            } else if (state.currentScreen === 5 && (state.planPG === 'no' || state.planPG === 'maybe')) {
+
+            } else if (state.currentScreen === 6 && (state.planSS === 'no' || state.planSS === 'maybe')) {
+                // Same as above.
+            }
+
+            state.currentScreen = prevScreenNum;
+            showCurrentScreen();
+            updateDynamicElements(); // Update elements based on new state/screen
+        }
+
+        function saveScreenData(screenNum) {
+            switch (screenNum) {
+                case 1:
+                    updateRadioState('startPoint', 'startPoint');
+                    break;
+                case 2:
+                    updateRadioState('medicalBranch', 'medicalBranch');
+                    break;
+                case 3:
+                    updateRadioState('gapYearsPreUG', 'gapYearsPreUG');
+                    if (state.gapYearsPreUG === '3plus') {
+                        updateNumberInputState('gapYearsPreUGInput', 'gapYearsPreUG');
+                    }
+                    updateRadioState('examAttempts', 'examAttempts');
+                    if (state.examAttempts === 'morethan3') {
+                        updateNumberInputState('examAttemptsInput', 'examAttempts');
+                    }
+                    break;
+                case 4:
+                    updateNumberInputState('ugCourseDuration', 'ugCourseDuration');
+                    updateRadioState('ugDelays', 'ugDelays');
+                    if (state.ugDelays === 'morethan1') {
+                        updateNumberInputState('ugDelaysInput', 'ugDelays');
+                    }
+                    updateRadioState('planPG', 'planPG'); // This is critical for next step logic
+                    break;
+                case 5:
+                    // Only save PG details if PG was intended to be pursued (or default 'yes')
+                    if (document.querySelector('input[name="planPG"]:checked').value === 'yes') {
+                        updateRadioState('gapYearsPrePG', 'gapYearsPrePG');
+                        if (state.gapYearsPrePG === '3plus') {
+                            updateNumberInputState('gapYearsPrePGInput', 'gapYearsPrePG');
+                        }
+                        updateNumberInputState('pgCourseDuration', 'pgCourseDuration');
+                        updateRadioState('pgDelays', 'pgDelays');
+                        if (state.pgDelays === 'morethan1') {
+                            updateNumberInputState('pgDelaysInput', 'pgDelays');
+                        }
+                    }
+                    updateRadioState('planSS', 'planSS'); // This is critical for next step logic
+                    break;
+                case 6:
+                    // Only save SS details if SS and PG were intended
+                    if (document.querySelector('input[name="planSS"]:checked').value === 'yes' && document.querySelector('input[name="planPG"]:checked').value === 'yes') {
+                        updateRadioState('gapYearsPreSS', 'gapYearsPreSS');
+                        if (state.gapYearsPreSS === '3plus') {
+                            updateNumberInputState('gapYearsPreSSInput', 'gapYearsPreSS');
+                        }
+                        updateNumberInputState('ssCourseDuration', 'ssCourseDuration');
+                        updateRadioState('ssDelays', 'ssDelays');
+                        if (state.ssDelays === 'morethan1') {
+                            updateNumberInputState('ssDelaysInput', 'ssDelays');
+                        }
+                    }
+                    break;
+            }
+            console.log("Current State:", state); // For debugging
+        }
+
+
+        function updateDynamicElements() {
+            // Screen 1: Conditional response
+            if (state.currentScreen === 1) {
+                const radios = document.querySelectorAll('input[name="startPoint"]');
+                radios.forEach(radio => {
+                    radio.onchange = () => {
+                        state.startPoint = radio.value; // Update state immediately
+                        let responseText = '';
+                        q1ConditionalResponse.classList.remove('hidden'); // Show it by default when an option is selected
+                        switch (state.startPoint) {
+                            case 'kindergarten':
+                            case 'primary':
+                                responseText = "Early start! We'll count from Grade 6.";
+                                break;
+                            case 'middle':
+                                responseText = "Fab! Grade 6 it is.";
+                                break;
+                            case 'high':
+                                responseText = "Spot on! Kicking off from Grade 9.";
+                                break;
+                            case 'after12th':
+                                responseText = "No sweat! We'll count from after 12th grade.";
+                                break;
+                            case 'pursuing':
+                                responseText = "Already a medical rockstar? Sweet! Let's jump to your current adventure.";
+                                break;
+                            default:
+                                responseText = '';
+                                q1ConditionalResponse.classList.add('hidden'); // Hide if no selection or other
+                        }
+                        q1ConditionalResponse.textContent = responseText;
+                    };
+                });
+                // Set initial conditional response if a radio is already checked (e.g., on back button)
+                const initialCheckedRadio = document.querySelector('input[name="startPoint"]:checked');
+                if (initialCheckedRadio) {
+                     initialCheckedRadio.onchange(); // Trigger its onchange handler
+                } else {
+                    q1ConditionalResponse.classList.add('hidden'); // Hide if nothing selected
+                }
+            }
+
+            // Screen 2: Medical Branch selection
+            if (state.currentScreen === 2) {
+                const radios = document.querySelectorAll('input[name="medicalBranch"]');
+                radios.forEach(radio => {
+                    radio.onchange = () => {
+                        state.medicalBranch = radio.value;
+                    };
+                });
+            }
+
+            // Screen 3: Gap years and exam attempts
+            if (state.currentScreen === 3) {
+                document.querySelectorAll('input[name="gapYearsPreUG"]').forEach(radio => {
+                    radio.onchange = () => {
+                        gapYearsPreUGInput.classList.add('hidden');
+                        if (radio.value === '3plus') {
+                            gapYearsPreUGInput.classList.remove('hidden');
+                            gapYearsPreUGInput.value = ''; // Clear for user input
+                        }
+                        state.gapYearsPreUG = radio.value;
+                    };
+                });
+                // Re-apply visibility for gapYearsPreUGInput on screen load if 3plus was already selected
+                if (document.querySelector('input[name="gapYearsPreUG"][value="3plus"]:checked')) {
+                    gapYearsPreUGInput.classList.remove('hidden');
+                } else {
+                    gapYearsPreUGInput.classList.add('hidden');
+                }
+
+                document.querySelectorAll('input[name="examAttempts"]').forEach(radio => {
+                    radio.onchange = () => {
+                        examAttemptsInput.classList.add('hidden');
+                        if (radio.value === 'morethan3') {
+                            examAttemptsInput.classList.remove('hidden');
+                            examAttemptsInput.value = ''; // Clear for user input
+                        }
+                        state.examAttempts = radio.value;
+                    };
+                });
+                // Re-apply visibility for examAttemptsInput on screen load if morethan3 was already selected
+                if (document.querySelector('input[name="examAttempts"][value="morethan3"]:checked')) {
+                    examAttemptsInput.classList.remove('hidden');
+                } else {
+                    examAttemptsInput.classList.add('hidden');
+                }
+            }
+
+            // Screen 4: UG Course Details
+            if (state.currentScreen === 4) {
+                // Pre-fill UG Course Duration based on medicalBranch
+                ugCourseDurationInput.value = ugDurations[state.medicalBranch] || 5.5; // Default to 5.5 if not found
+                ugCourseDurationInput.onchange = () => {
+                    state.ugCourseDuration = parseFloat(ugCourseDurationInput.value);
+                };
+
+                document.querySelectorAll('input[name="ugDelays"]').forEach(radio => {
+                    radio.onchange = () => {
+                        ugDelaysInput.classList.add('hidden');
+                        if (radio.value === 'morethan1') {
+                            ugDelaysInput.classList.remove('hidden');
+                            ugDelaysInput.value = '';
+                        }
+                        state.ugDelays = radio.value;
+                    };
+                });
+                if (document.querySelector('input[name="ugDelays"][value="morethan1"]:checked')) {
+                    ugDelaysInput.classList.remove('hidden');
+                } else {
+                    ugDelaysInput.classList.add('hidden');
+                }
+
+                document.querySelectorAll('input[name="planPG"]').forEach(radio => {
+                    radio.onchange = () => {
+                        state.planPG = radio.value;
+                    };
+                });
+            }
+
+            // Screen 5: PG Course Details
+            if (state.currentScreen === 5) {
+                document.querySelectorAll('input[name="gapYearsPrePG"]').forEach(radio => {
+                    radio.onchange = () => {
+                        gapYearsPrePGInput.classList.add('hidden');
+                        if (radio.value === '3plus') {
+                            gapYearsPrePGInput.classList.remove('hidden');
+                            gapYearsPrePGInput.value = '';
+                        }
+                        state.gapYearsPrePG = radio.value;
+                    };
+                });
+                if (document.querySelector('input[name="gapYearsPrePG"][value="3plus"]:checked')) {
+                    gapYearsPrePGInput.classList.remove('hidden');
+                } else {
+                    gapYearsPrePGInput.classList.add('hidden');
+                }
+
+                pgCourseDurationInput.onchange = () => {
+                    state.pgCourseDuration = parseFloat(pgCourseDurationInput.value);
+                };
+
+                document.querySelectorAll('input[name="pgDelays"]').forEach(radio => {
+                    radio.onchange = () => {
+                        pgDelaysInput.classList.add('hidden');
+                        if (radio.value === 'morethan1') {
+                            pgDelaysInput.classList.remove('hidden');
+                            pgDelaysInput.value = '';
+                        }
+                        state.pgDelays = radio.value;
+                    };
+                });
+                if (document.querySelector('input[name="pgDelays"][value="morethan1"]:checked')) {
+                    pgDelaysInput.classList.remove('hidden');
+                } else {
+                    pgDelaysInput.classList.add('hidden');
+                }
+
+                document.querySelectorAll('input[name="planSS"]').forEach(radio => {
+                    radio.onchange = () => {
+                        state.planSS = radio.value;
+                    };
+                });
+            }
+
+            // Screen 6: SS Course Details
+            if (state.currentScreen === 6) {
+                document.querySelectorAll('input[name="gapYearsPreSS"]').forEach(radio => {
+                    radio.onchange = () => {
+                        gapYearsPreSSInput.classList.add('hidden');
+                        if (radio.value === '3plus') {
+                            gapYearsPreSSInput.classList.remove('hidden');
+                            gapYearsPreSSInput.value = '';
+                        }
+                        state.gapYearsPreSS = radio.value;
+                    };
+                });
+                if (document.querySelector('input[name="gapYearsPreSS"][value="3plus"]:checked')) {
+                    gapYearsPreSSInput.classList.remove('hidden');
+                } else {
+                    gapYearsPreSSInput.classList.add('hidden');
+                }
+
+                ssCourseDurationInput.onchange = () => {
+                    state.ssCourseDuration = parseFloat(ssCourseDurationInput.value);
+                };
+
+                document.querySelectorAll('input[name="ssDelays"]').forEach(radio => {
+                    radio.onchange = () => {
+                        ssDelaysInput.classList.add('hidden');
+                        if (radio.value === 'morethan1') {
+                            ssDelaysInput.classList.remove('hidden');
+                            ssDelaysInput.value = '';
+                        }
+                        state.ssDelays = radio.value;
+                    };
+                });
+                if (document.querySelector('input[name="ssDelays"][value="morethan1"]:checked')) {
+                    ssDelaysInput.classList.remove('hidden');
+                } else {
+                    ssDelaysInput.classList.add('hidden');
+                }
+            }
+        }
+
+        function calculateDuration() {
+            let totalYears = 0;
+            let breakdown = [];
+
+            // 1. Base Years (Pre-UG schooling)
+            let baseSchoolingYears = 0;
+            let startPointText = '';
+            if (state.startPoint === 'middle') {
+                baseSchoolingYears = 7; // Grades 6-12 = 7 years
+                startPointText = 'Middle School (Grade 6)';
+            } else if (state.startPoint === 'high') {
+                baseSchoolingYears = 4; // Grades 9-12 = 4 years
+                startPointText = 'High School (Grade 9)';
+            } else if (state.startPoint === 'after12th' || state.startPoint === 'pursuing') {
+                baseSchoolingYears = 0;
+                startPointText = 'After 12th Grade';
+            } else { // kindergarten, primary - default to middle school calculation
+                baseSchoolingYears = 7;
+                startPointText = 'Middle School (Grade 6)';
+            }
+            if (state.startPoint !== 'pursuing') { // Only add schooling years if not already pursuing
+                totalYears += baseSchoolingYears;
+                breakdown.push({ label: `School Years (${startPointText} to 12th)`, years: baseSchoolingYears });
+            }
+
+            // 2. Pre-UG Gap/Attempts
+            let preUGGap = parseFloat(state.gapYearsPreUG);
+            if (state.gapYearsPreUG === '3plus' && gapYearsPreUGInput.value) {
+                preUGGap = parseFloat(gapYearsPreUGInput.value);
+            }
+            let examAttemptsExtra = 0;
+            if (state.examAttempts === '2') {
+                examAttemptsExtra = 1;
+            } else if (state.examAttempts === '3') {
+                examAttemptsExtra = 2;
+            } else if (state.examAttempts === 'morethan3' && examAttemptsInput.value) {
+                examAttemptsExtra = parseFloat(examAttemptsInput.value) - 1; // Assuming 1st attempt is 0 extra, 2nd is 1 extra, etc.
+            }
+
+            const totalPreUGExtra = Math.max(preUGGap, examAttemptsExtra); // Take the max to avoid double counting if gap and attempts overlap
+            if (totalPreUGExtra > 0) {
+                totalYears += totalPreUGExtra;
+                breakdown.push({ label: `Pre-UG Prep/Breaks`, years: totalPreUGExtra });
+            }
+
+
+            // 3. UG Course Duration
+            const ugDuration = parseFloat(state.ugCourseDuration) || ugDurations[state.medicalBranch] || 5.5;
+            totalYears += ugDuration;
+            breakdown.push({ label: `UG Course (${state.medicalBranch || 'UG'})`, years: ugDuration });
+
+            // 4. UG Course Delays
+            let ugDelays = parseFloat(state.ugDelays);
+            if (state.ugDelays === 'morethan1' && ugDelaysInput.value) {
+                ugDelays = parseFloat(ugDelaysInput.value);
+            }
+            if (ugDelays > 0) {
+                totalYears += ugDelays;
+                breakdown.push({ label: `UG Delays`, years: ugDelays });
+            }
+
+            // 5. PG Details (if planned)
+            if (state.planPG === 'yes') {
+                let prePGGap = parseFloat(state.gapYearsPrePG);
+                if (state.gapYearsPrePG === '3plus' && gapYearsPrePGInput.value) {
+                    prePGGap = parseFloat(gapYearsPrePGInput.value);
+                }
+                if (prePGGap > 0) {
+                    totalYears += prePGGap;
+                    breakdown.push({ label: `Pre-PG Breaks`, years: prePGGap });
+                }
+
+                const pgDuration = parseFloat(state.pgCourseDuration) || 3;
+                totalYears += pgDuration;
+                breakdown.push({ label: `PG Course`, years: pgDuration });
+
+                let pgDelays = parseFloat(state.pgDelays);
+                if (state.pgDelays === 'morethan1' && pgDelaysInput.value) {
+                    pgDelays = parseFloat(pgDelaysInput.value);
+                }
+                if (pgDelays > 0) {
+                    totalYears += pgDelays;
+                    breakdown.push({ label: `PG Delays`, years: pgDelays });
+                }
+
+                // 6. SS Details (if planned)
+                if (state.planSS === 'yes') {
+                    let preSSGap = parseFloat(state.gapYearsPreSS);
+                    if (state.gapYearsPreSS === '3plus' && gapYearsPreSSInput.value) {
+                        preSSGap = parseFloat(gapYearsPreSSInput.value);
+                    }
+                    if (preSSGap > 0) {
+                        totalYears += preSSGap;
+                        breakdown.push({ label: `Pre-SS Breaks`, years: preSSGap });
+                    }
+
+                    const ssDuration = parseFloat(state.ssCourseDuration) || 3;
+                    totalYears += ssDuration;
+                    breakdown.push({ label: `Super Specialization`, years: ssDuration });
+
+                    let ssDelays = parseFloat(state.ssDelays);
+                    if (state.ssDelays === 'morethan1' && ssDelaysInput.value) {
+                        ssDelays = parseFloat(ssDelaysInput.value);
+                    }
+                    if (ssDelays > 0) {
+                        totalYears += ssDelays;
+                        breakdown.push({ label: `SS Delays`, years: ssDelays });
+                    }
+                }
+            }
+
+            // Store calculated total years in state for Gemini API use
+            state.calculatedTotalYears = totalYears.toFixed(1);
+            state.breakdown = breakdown; // Store breakdown for potential future use
+
+            // Display results
+            totalYearsDisplay.textContent = `${state.calculatedTotalYears} Years`; // Display with one decimal place
+            breakdownSection.innerHTML = ''; // Clear previous breakdown
+            breakdown.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'breakdown-item';
+                div.innerHTML = `<span>${item.label}:</span> <span class="font-medium">${item.years.toFixed(1)} years</span>`;
+                breakdownSection.appendChild(div);
+            });
+        }
+
+
+        function calculateJourney() {
+            saveScreenData(state.currentScreen); // Save data from the last screen
+            calculateDuration();
+            state.currentScreen = 7;
+            showCurrentScreen();
+            // Clear any previous motivation message
+            motivationMessage.classList.add('hidden');
+            motivationMessage.textContent = '';
+        }
+
+        function startNewCalculation() {
+            // Reset all input fields and radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                // Set default checked state for specific groups where applicable
+                if (radio.name === 'gapYearsPreUG' && radio.value === '0') radio.checked = true;
+                else if (radio.name === 'examAttempts' && radio.value === '1') radio.checked = true;
+                else if (radio.name === 'ugDelays' && radio.value === '0') radio.checked = true;
+                else if (radio.name === 'planPG' && radio.value === 'yes') radio.checked = true;
+                else if (radio.name === 'gapYearsPrePG' && radio.value === '0') radio.checked = true;
+                else if (radio.name === 'pgDelays' && radio.value === '0') radio.checked = true;
+                else if (radio.name === 'planSS' && radio.value === 'yes') radio.checked = true;
+                else if (radio.name === 'gapYearsPreSS' && radio.value === '0') radio.checked = true;
+                else if (radio.name === 'ssDelays' && radio.value === '0') radio.checked = true;
+                // For startPoint and medicalBranch, uncheck all to force selection
+                else if (radio.name === 'startPoint' || radio.name === 'medicalBranch') radio.checked = false;
+            });
+
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.value = input.dataset.defaultValue || ''; // Clear or set to default if available
+                input.classList.add('hidden'); // Hide conditional number inputs
+            });
+
+            // Reset specific default values
+            ugCourseDurationInput.value = 5.5;
+            pgCourseDurationInput.value = 3;
+            ssCourseDurationInput.value = 3;
+
+            // Hide conditional response and sections by default
+            q1ConditionalResponse.classList.add('hidden');
+            gapYearsPreUGInput.classList.add('hidden');
+            examAttemptsInput.classList.add('hidden');
+            ugDelaysInput.classList.add('hidden');
+            gapYearsPrePGInput.classList.add('hidden');
+            pgDelaysInput.classList.add('hidden');
+            gapYearsPreSSInput.classList.add('hidden');
+            ssDelaysInput.classList.add('hidden');
+
+            copyMessage.classList.add('hidden'); // Hide copy message
+            motivationMessage.classList.add('hidden'); // Hide motivation message
+            motivationMessage.textContent = ''; // Clear motivation message
+
+
+            // Reset state object to initial values
+            Object.assign(state, {
+                currentScreen: 1,
+                startPoint: '',
+                medicalBranch: '',
+                gapYearsPreUG: 0,
+                examAttempts: 0,
+                ugCourseDuration: 0,
+                ugDelays: 0,
+                planPG: 'yes',
+                gapYearsPrePG: 0,
+                pgCourseDuration: 0,
+                pgDelays: 0,
+                planSS: 'yes',
+                gapYearsPreSS: 0,
+                ssCourseDuration: 0,
+                ssDelays: 0,
+                calculatedTotalYears: 0, // Reset calculated years
+                breakdown: [], // Clear breakdown
+            });
+
+            showCurrentScreen();
+            updateDynamicElements(); // Re-initialize dynamic elements based on reset state
+        }
+
+
+        function shareJourney() {
+            const shareableData = `My Doctor Journey Timeline Result:\n\n${totalYearsDisplay.textContent}\n\nBreakdown:\n${breakdownSection.innerText}\n\n(This is a simulated share. In a real app, this would be a unique URL based on your choices.)`;
+            navigator.clipboard.writeText(shareableData)
+                .then(() => {
+                    copyMessage.classList.remove('hidden');
+                    setTimeout(() => copyMessage.classList.add('hidden'), 3000);
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                    const textArea = document.createElement("textarea");
+                    textArea.value = shareableData;
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        copyMessage.classList.remove('hidden');
+                        setTimeout(() => copyMessage.classList.add('hidden'), 3000);
+                    } catch (e) {
+                        alert("Could not copy text automatically. Please copy the result manually from the page.");
+                    }
+                    document.body.removeChild(textArea);
+                });
+        }
+
+
+        async function getMotivation() {
+            motivationMessage.classList.add('hidden');
+            motivationMessage.textContent = '';
+            motivationSpinner.style.display = 'block'; // Show loading spinner
+
+            const medicalBranch = state.medicalBranch || 'a medical field';
+            const totalYears = state.calculatedTotalYears || 'a significant number of';
+            const pgPlan = state.planPG === 'yes' ? ' with further specialization' : '';
+            const ssPlan = state.planSS === 'yes' ? ' and super specialization' : '';
+            const hasDelays = (parseFloat(state.ugDelays) > 0 || parseFloat(state.pgDelays) > 0 || parseFloat(state.ssDelays) > 0 || parseFloat(state.gapYearsPreUG) > 0 || parseFloat(state.gapYearsPrePG) > 0 || parseFloat(state.gapYearsPreSS) > 0);
+
+            let prompt = `Generate a very short, encouraging, and personalized motivational message for a student whose medical journey in India is ${totalYears} years, pursuing ${medicalBranch}${pgPlan}${ssPlan}.`;
+
+            if (hasDelays) {
+                prompt += ` Inject some humor about navigating unexpected detours (like extra attempts or breaks), and cheer them on for their perseverance. Make it witty, lighthearted, and like a mini cheer for their epic quest.`;
+            } else {
+                prompt += ` Make it witty, lighthearted, and like a mini cheer for their epic quest, highlighting their swift dedication.`;
+            }
+
+            prompt += ` Keep it under 50 words. Make sure it sounds like a fun, encouraging message from a "journey generator" tool.`;
+
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    motivationMessage.textContent = text;
+                    motivationMessage.classList.remove('hidden');
+                } else {
+                    motivationMessage.textContent = "Oops! Our motivation fairy is napping. Try again later for your pep talk!";
+                    motivationMessage.classList.remove('hidden');
+                    console.error("Gemini API returned an unexpected response structure:", result);
+                }
+            } catch (error) {
+                motivationMessage.textContent = "Uh oh! Can't connect to the motivation stars. Check your internet and try again!";
+                motivationMessage.classList.remove('hidden');
+                console.error("Error calling Gemini API:", error);
+            } finally {
+                motivationSpinner.style.display = 'none'; // Hide loading spinner
+            }
+        }
+
+
+        // Initialize the calculator on load
+        document.addEventListener('DOMContentLoaded', () => {
+            showCurrentScreen();
+            updateDynamicElements(); // Attach initial event listeners and update UI
+        });
+
+    </script>
 </body>
 </html>
