@@ -8,292 +8,344 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #ffffff; /* Pure white background */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 1.5rem; /* Increased padding */
-            padding-top: 6.5rem; /* Space for the fixed header */
-            box-sizing: border-box;
-        }
-        .header-fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background-color: #ffffff;
-            z-index: 1000; /* Ensure it stays on top */
-            padding: 1rem 1.5rem; /* Padding inside the header */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 4.5rem; /* Fixed height for the header */
-            box-sizing: border-box;
-        }
-        .header-logo {
-            height: 40px; /* Fixed height for logo */
-            object-fit: contain; /* Ensure logo fits without distortion */
-        }
-        .header-icon-wrapper {
-            position: relative;
-            cursor: pointer;
-            padding: 0.5rem; /* Make icons more tappable */
-            border-radius: 0.75rem; /* Rounded corners for touch area */
-            transition: background-color 0.2s ease-in-out;
-        }
-        .header-icon-wrapper:hover {
-            background-color: #f0f4f8; /* Light background on hover */
-        }
-        .icon-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #ef4444; /* Red color */
-            color: white;
-            border-radius: 9999px; /* Fully rounded */
-            padding: 0.15rem 0.5rem; /* Smaller padding for badge */
-            font-size: 0.75rem; /* Smaller font size */
-            font-weight: 600;
-            line-height: 1; /* Ensure text fits */
-        }
-        .container {
-            max-width: 550px; /* Slightly wider for a more spacious feel */
-            width: 100%;
-            background-color: aliceblue;
-            border-radius: 1.75rem; /* Consistent roundedness */
-            /* Advanced, multi-layered shadows for a floating, premium feel */
-            /* box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08), 0 5px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0,0,0,0.03); */
-            padding: 2.5rem; /* More generous padding */
-            transition: all 0.3s ease-in-out;
-            overflow: hidden;
-            border: 1px solid #e0e7ee; /* Very subtle, light border */
-        }
-        .form-screen {
-            display: none;
-            animation: fadeIn 0.5s ease-out forwards; /* Fade in animation, keep final state */
-        }
-        .form-screen.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); } /* More pronounced slide-up */
-            to { opacity: 1; transform: translateY(0); }
-        }
+ <style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #ffffff;
+        /* Removed display: flex, justify-content: center, align-items: center */
+        min-height: 100vh; /* Keep min-height to ensure it takes at least full viewport height */
+        margin: 0;
+        padding: 1rem;
+        padding-top: 5.5rem; /* Keep this to account for the fixed header */
+        box-sizing: border-box;
+        font-size: 0.85rem;
+    }
 
-        /* Progress Bar */
-        .progress-bar-container {
-            width: 100%;
-            background-color: #e6f7ff; /* Lighter blue for track */
-            border-radius: 0.5rem;
-            height: 10px;
-            margin-bottom: 2rem; /* More space below */
-            overflow: hidden;
-        }
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(to right, #00bfff, #1a73e8); /* Vibrant blue gradient */
-            border-radius: 0.5rem;
-            width: 0%;
-            transition: width 0.5s ease-in-out;
-        }
+    .header-fixed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        z-index: 1000;
+        padding: 0.8rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 4rem;
+        box-sizing: border-box;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Added a subtle shadow to header */
+    }
 
-        .radio-option {
-            display: flex;
-            align-items: center;
-            padding: 1.1rem 1.4rem; /* More padding */
-            margin-bottom: 0.9rem; /* Consistent spacing */
-            background-color: #fafdff; /* Almost white with a hint of blue */
-            border-radius: 1.25rem; /* Softer roundedness */
-            cursor: pointer;
-            transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease-in-out;
-            border: 1px solid #e8f0f7; /* Very subtle border */
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05); /* Finer, softer shadow */
-        }
-        .radio-option:hover {
-            background-color: #eef7ff; /* Light blue on hover */
-            border-color: #a7d3f2;
-            transform: translateY(-3px); /* More pronounced lift */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08); /* Stronger shadow on hover */
-        }
-        .radio-option input[type="radio"]:checked + span {
-            font-weight: 700; /* Bolder text for selected */
-            color: #1a73e8; /* Google Blue */
-        }
-        .radio-option input[type="radio"]:checked {
-            border-color: #1a73e8; /* Vibrant border for selected */
-            background-color: #e0f2fe; /* Lightest blue background */
-        }
-        .radio-option input[type="radio"] {
-            margin-right: 1.1rem; /* More space */
-            accent-color: #1a73e8; /* Google Blue for checkmark */
-            width: 1.5rem; /* Larger radio button */
-            height: 1.5rem; /* Larger radio button */
-            flex-shrink: 0;
-        }
+    .header-logo {
+        height: 32px;
+        object-fit: contain;
+    }
 
-        .button-primary {
-            /* Bold primary action - green */
-            background: #1877F2; /* Stronger green gradient */
-            color: white;
-            padding: 0.9rem 2.2rem; /* Reduced padding */
-            border-radius: 1.5rem; /* Consistent roundedness */
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.45); /* More prominent shadow */
-            border: none;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            letter-spacing: 0.025em; /* Slightly spaced letters */
-        }
-        .button-primary:hover {
-            transform: translateY(-4px); /* More lift */
-            box-shadow: 0 15px 30px rgba(76, 175, 80, 0.6);
-        }
-        .button-primary:active {
-            transform: translateY(0);
-            box-shadow: 0 5px 12px rgba(76, 175, 80, 0.3);
-        }
+    .header-icon-wrapper {
+        position: relative;
+        cursor: pointer;
+        padding: 0.4rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s ease-in-out;
+    }
 
-        .button-secondary {
-            /* Cool blue for secondary actions */
-            background-color: #e3f2fd;
-            color: #4a5568;
-            padding: 0.9rem 2.2rem; /* Reduced padding */
-            border-radius: 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-            letter-spacing: 0.015em;
-        }
-        .button-secondary:hover {
-            background-color: #bbdefb;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
-        }
-        .button-secondary:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
+    .header-icon-wrapper:hover {
+        background-color: #f0f4f8;
+    }
 
-        .input-field {
-            border: 1px solid #dbe6f0; /* Softer border */
-            border-radius: 1rem;
-            padding: 1rem 1.4rem;
-            width: 100%;
-            margin-top: 0.8rem; /* More space */
-            background-color: #f8faff;
-            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            font-size: 1.05rem; /* Slightly larger font */
-            color: #333;
-        }
-        .input-field:focus {
-            outline: none;
-            border-color: #1a73e8; /* Google Blue focus */
-            box-shadow: 0 0 0 5px rgba(26, 115, 232, 0.25); /* Larger, softer focus shadow */
-            background-color: white;
-        }
-        .result-display {
-            font-size: 5rem; /* Even larger for main result */
-            font-weight: 800;
-            color: #1a365d; /* Dark blue, impactful */
-            margin-bottom: 2.8rem; /* More spacing */
-            text-align: center;
-            line-height: 1;
-            letter-spacing: -0.06em; /* Tighter for modern feel */
-            text-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Subtle text shadow */
-        }
-        .breakdown-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.9rem 0; /* More padding */
-            border-bottom: 1px dashed #eef2f7; /* Very light dashed line */
-            font-size: 1rem; /* Clear font size */
-            color: #4a5568;
-        }
-        .breakdown-item:last-child {
-            border-bottom: none;
-        }
-        .breakdown-item span:first-child {
-            flex-grow: 1;
-        }
-        .breakdown-item span:last-child {
-            font-weight: 600;
-            color: #2d3748;
-        }
+    .icon-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        background-color: #ef4444;
+        color: white;
+        border-radius: 9999px;
+        padding: 0.1rem 0.4rem;
+        font-size: 0.65rem;
+        font-weight: 600;
+        line-height: 1;
+    }
 
-        .motivation-box {
-            background-color: #e6f7ff; /* Light, calming blue */
-            border: 2px dashed #89cff0; /* Dashed blue border */
-            border-radius: 1.25rem; /* Match other elements */
-            padding: 2rem; /* Generous padding */
-            margin-top: 2.5rem; /* More separation */
-            font-style: italic;
-            color: #2c5282;
-            text-align: center;
-            line-height: 1.7; /* Improved readability */
-            font-weight: 500;
-            box-shadow: 0 10px 25px rgba(137, 207, 240, 0.3); /* Softer, broader shadow */
-        }
-        .loading-spinner {
-            border: 5px solid #f3f3f3; /* Thicker */
-            border-top: 5px solid #1a73e8; /* Google blue, thicker */
-            border-radius: 50%;
-            width: 30px; /* Larger */
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto; /* More margin */
-            display: none;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+    .container {
+        max-width: 440px;
+        width: 100%;
+        background-color: aliceblue;
+        border-radius: 1.5rem;
+        padding: 1.8rem;
+        transition: all 0.3s ease-in-out;
+        overflow: hidden; /* Keep this to prevent content spilling out of rounded corners */
+        border: 1px solid #e0e7ee;
+        margin-left: auto; /* Added for horizontal centering */
+        margin-right: auto; /* Added for horizontal centering */
+        margin-bottom: 2rem; /* Add some space at the bottom of the container */
+    }
 
-        /* General Heading and Paragraph Styles */
-        h1, h2 {
-            color: #2d3748; /* Darker text for headings */
-            font-weight: 800; /* Extra bold */
+    .form-screen {
+        display: none;
+        animation: fadeIn 0.5s ease-out forwards;
+    }
+
+    .form-screen.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .progress-bar-container {
+        width: 100%;
+        background-color: #e6f7ff;
+        border-radius: 0.5rem;
+        height: 8px;
+        margin-bottom: 1.5rem;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background: linear-gradient(to right, #00bfff, #1a73e8);
+        border-radius: 0.5rem;
+        width: 0%;
+        transition: width 0.5s ease-in-out;
+    }
+
+    .radio-option {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem 1rem;
+        margin-bottom: 0.6rem;
+        background-color: #fafdff;
+        border-radius: 1rem;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+        border: 1px solid #e8f0f7;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .radio-option:hover {
+        background-color: #eef7ff;
+        border-color: #a7d3f2;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    }
+
+    .radio-option input[type="radio"]:checked + span {
+        font-weight: 700;
+        color: #1a73e8;
+    }
+
+    .radio-option input[type="radio"]:checked {
+        border-color: #1a73e8;
+        background-color: #e0f2fe;
+    }
+
+    .radio-option input[type="radio"] {
+        margin-right: 0.8rem;
+        accent-color: #1a73e8;
+        width: 1.1rem;
+        height: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .button-primary {
+        background: #1877F2;
+        color: white;
+        padding: 0.6rem 1.4rem;
+        border-radius: 1rem;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 5px 14px rgba(76, 175, 80, 0.4);
+        border: none;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        letter-spacing: 0.02em;
+    }
+
+    .button-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(76, 175, 80, 0.5);
+    }
+
+    .button-primary:active {
+        transform: translateY(0);
+        box-shadow: 0 3px 8px rgba(76, 175, 80, 0.25);
+    }
+
+    .button-secondary {
+        background-color: #e3f2fd;
+        color: #4a5568;
+        padding: 0.6rem 1.4rem;
+        border-radius: 1rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border: none;
+        box-shadow: 0 3px 8px rgba(0,0,0,0.07);
+        letter-spacing: 0.015em;
+    }
+
+    .button-secondary:hover {
+        background-color: #bbdefb;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+    }
+
+    .button-secondary:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    .input-field {
+        border: 1px solid #dbe6f0;
+        border-radius: 0.8rem;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        margin-top: 0.6rem;
+        background-color: #f8faff;
+        transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    .input-field:focus {
+        outline: none;
+        border-color: #1a73e8;
+        box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.25);
+        background-color: white;
+    }
+
+    .result-display {
+        font-size: 3.2rem;
+        font-weight: 800;
+        color: #1a365d;
+        margin-bottom: 2rem;
+        text-align: center;
+        line-height: 1;
+        letter-spacing: -0.04em;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .breakdown-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.6rem 0;
+        border-bottom: 1px dashed #eef2f7;
+        font-size: 0.85rem;
+        color: #4a5568;
+    }
+
+    .breakdown-item:last-child {
+        border-bottom: none;
+    }
+
+    .breakdown-item span:first-child {
+        flex-grow: 1;
+    }
+
+    .breakdown-item span:last-child {
+        font-weight: 600;
+        color: #2d3748;
+    }
+
+    .motivation-box {
+        background-color: #e6f7ff;
+        border: 2px dashed #89cff0;
+        border-radius: 1rem;
+        padding: 1.4rem;
+        margin-top: 2rem;
+        font-style: italic;
+        color: #2c5282;
+        text-align: center;
+        line-height: 1.6;
+        font-weight: 500;
+        font-size: 0.9rem;
+        box-shadow: 0 8px 20px rgba(137, 207, 240, 0.25);
+    }
+
+    .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #1a73e8;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        animation: spin 1s linear infinite;
+        margin: 1.5rem auto;
+        display: none;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    h1{
+        color: #2d3748;
+        font-weight: 800;
+        font-size: 0.8rem; /* This seems too small for h1, consider increasing for better readability */
+    }
+
+    h2 {
+        color: #2d3748;
+        font-weight: 800;
+        font-size: 0.8rem; /* This also seems too small for h2, consider increasing */
+    }
+
+    h3 {
+        color: #384252;
+        font-weight: 700;
+        margin-bottom: 0.9rem;
+        font-size: 0.7rem; /* This too */
+    }
+
+    /* Adjusting heading sizes for better visual hierarchy and readability */
+    @media (min-width: 768px) { /* Apply on medium screens and up */
+        h1 {
+            font-size: 2.5rem; /* Increased size for h1 */
+        }
+        h2 {
+            font-size: 2rem; /* Increased size for h2 */
         }
         h3 {
-            color: #384252; /* Slightly softer for sub-headings */
-            font-weight: 700;
-            margin-bottom: 1.2rem; /* Consistent spacing */
+            font-size: 1.25rem; /* Increased size for h3 */
         }
-        p.text-gray-600 {
-            color: #5a677a; /* Good contrast for main text */
-            font-size: 1.05rem; /* Slightly larger */
-        }
-        p.text-gray-500 {
-            color: #718096; /* Lighter for secondary info */
-            font-size: 0.95rem;
-        }
-        p#q1-conditional-response {
-            background-color: #f0f8ff; /* Lighter tint */
-            border: 1px solid #d4e8f7; /* Soft border */
-            color: #2a65ad; /* Deeper blue */
-            padding: 1.2rem;
-            border-radius: 1rem;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-    </style>
+    }
+    
+    p.text-gray-600 {
+        color: #5a677a;
+        font-size: 0.95rem;
+    }
+
+    p.text-gray-500 {
+        color: #718096;
+        font-size: 0.6rem;
+    }
+
+    p#q1-conditional-response {
+        background-color: #f0f8ff;
+        border: 1px solid #d4e8f7;
+        color: #2a65ad;
+        padding: 1rem;
+        border-radius: 0.8rem;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+</style>
 </head>
 <body class="flex items-center justify-center min-h-screen">
     <!-- Sticky Header -->
     <header class="header-fixed">
-        <a href="https://clavikl.com/">
+        <a href="https:clavikl.com/">
             <img src="https://clavikl.com/uploads/default/original/1X/6846d22ea09acec3bb934fe4c7af082d2740d431.jpeg" alt="App Logo" class="header-logo">
         </a>
         <div class="flex items-center space-x-4">
        <!-- CHAT ICON -->
-<a href="https://clavikl.com/chat" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 transition">
+<a href="https:clavikl.com/chat" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 transition">
   <!-- Messenger-like SVG inside a circular button -->
   <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
     <path d="M12 2C6.48 2 2 6.04 2 11c0 2.21.93 4.23 2.47 5.74L4 22l4.6-2.42c1.1.31 2.27.47 3.4.47 5.52 0 10-4.04 10-9s-4.48-9-10-9zm1.95 10.45l-2.6-1.96a.75.75 0 0 0-.94.02l-3.72 3.02 2.6-3.9a.75.75 0 0 1 1.04-.21l2.6 1.96a.75.75 0 0 0 .94-.02l3.72-3.02-2.6 3.9a.75.75 0 0 1-1.04.21z"/>
@@ -304,7 +356,7 @@
 </a>
 
 <!-- USERS ICON -->
-<a href="https://clavikl.com/u" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 transition ml-2">
+<a href="https:clavikl.com/u" class="relative inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 transition ml-2">
   <!-- Modern users icon -->
   <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
     <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 2.03 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
@@ -328,7 +380,7 @@
 
         <!-- Screen 1: Welcome & Initial Assessment -->
         <div id="screen1" class="form-screen active">
-  <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-4 leading-tight">
+  <h1 class="text-2xl md:text-4xl font-extrabold text-center mb-4 leading-tight">
   How Long 'Til You're a Doctor? 🧠💉
 </h1>
 <p class="text-md md:text-lg text-center text-gray-600 mb-8">
@@ -336,7 +388,7 @@
 </p>
 
 
-            <h3 class="text-xl font-semibold text-gray-700 mb-4">When did the doctor-y feeling first hit you?</h3>
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">When did the doctor-y feeling first hit you?</h3>
             <div class="space-y-4 mb-6"> <!-- Increased space -->
                 <label class="radio-option">
                     <input type="radio" name="startPoint" value="kindergarten" class="hidden">
@@ -363,7 +415,7 @@
                     <span>Already pursuing a medical course</span>
                 </label>
             </div>
-            <p id="q1-conditional-response" class="text-sm italic hidden"></p>
+            <p id="q1-conditional-response" class="text-lg italic hidden"></p>
 
             <div class="flex justify-end pt-5"> <!-- More padding -->
                 <button onclick="nextStep()" class="button-primary">Next</button>
@@ -375,9 +427,10 @@
 <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">
   Choose What You’re Gonna Flex 💪🩺
 </h2>
-<h3 class="text-xl font-semibold text-gray-700 mb-4">
+<h3 class="text-base font-semibold text-gray-700 mb-4">
   MBBS, BDS, BAMS, or BHMS — what’s your doc path flex?
 </h3>
+
 
             <div class="space-y-4 mb-6"> <!-- Increased space -->
                 <label class="radio-option">
@@ -425,7 +478,7 @@
   The Prep-School Power-Up 💥📚
 </h2>
 
-<h3 class="text-xl font-semibold text-gray-700 mb-4">
+<h3 class="text-lg font-semibold text-gray-700 mb-4">
   Took a gap year (or five) to level up before MBBS?
 </h3>
 
@@ -449,7 +502,7 @@
                 <input type="number" id="gapYearsPreUGInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 3, 4)" min="3">
             </div>
 
-<h3 class="text-xl font-semibold text-gray-700 mb-4">
+<h3 class="text-lg font-semibold text-gray-700 mb-4">
   How many attempts did it take to slay the NEET boss? 🧠⚔️
 </h3>
 
@@ -485,15 +538,15 @@
   Your Core Healing Degree: Level 1 🩺🎓
 </h2>
 
-<h3 class="text-xl font-semibold text-gray-700 mb-4">
+<h3 class="text-lg font-semibold text-gray-700 mb-4">
   How long did your UG journey take — including the legendary internship?
 </h3>
-<p class="text-sm text-gray-500 mb-2">
+<p class="text-lg text-gray-600 font-medium mb-2">
   We've added the usual timeline, but feel free to adjust if COVID, strikes, or unexpected detours came your way.
 </p>
 <input type="number" id="ugCourseDuration" class="input-field mb-6" step="0.5" min="0" value="5.5">
 
-<h3 class="text-xl font-semibold text-gray-700 mb-4">
+<h3 class="text-lg font-semibold text-gray-700 mb-4">
   Any surprise breaks during UG? (COVID chaos, university strikes, or life doing its thing?)
 </h3>
 
@@ -517,7 +570,7 @@
                 <input type="number" id="ugDelaysInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 1.5, 2)" step="0.5" min="1.5">
             </div>
 
-         <h3 class="text-xl font-semibold text-gray-700 mb-4">
+         <h3 class="text-lg font-semibold text-gray-700 mb-4">
   Post-grad dreams or peace-of-mind plans?
 </h3>
 <div class="space-y-4 mb-6">
@@ -549,7 +602,7 @@
 </h2>
 
 <div id="pg-details-section">
-  <h3 class="text-xl font-semibold text-gray-700 mb-4">
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">
     Took a breather (or burnout recovery) before PG prep? <span class="font-bold text-blue-600">Be honest</span> — no judgment.
   </h3>
   <div class="space-y-4 mb-6">
@@ -572,12 +625,12 @@
     <input type="number" id="gapYearsPrePGInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 3, 4)" min="3">
   </div>
 
-               <h3 class="text-xl font-semibold text-gray-700 mb-4">
+               <h3 class="text-lg font-semibold text-gray-700 mb-4">
   How long was your PG phase — the great sequel to UG?
 </h3>
 <input type="number" id="pgCourseDuration" class="input-field mb-6" step="0.5" min="0" value="3">
 
-<h3 class="text-xl font-semibold text-gray-700 mb-4">
+<h3 class="text-lg font-semibold text-gray-700 mb-4">
   Did PG go smoothly, or did life throw in some delays?
 </h3>
 <div class="space-y-4 mb-6">
@@ -600,7 +653,7 @@
   <input type="number" id="pgDelaysInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 1.5, 2)" step="0.5" min="1.5">
 </div>
 
-<h3 class="text-xl font-semibold text-gray-700 mb-4">
+<h3 class="text-lg font-semibold text-gray-700 mb-4">
   Thinking of going further with Super Specialization?
 </h3>
 <div class="space-y-4 mb-6">
@@ -630,7 +683,7 @@
   <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">Ultimate Power-Up: Super Specialization! 🧬</h2>
 
   <div id="ss-details-section">
-    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+    <h3 class="text-lg font-semibold text-gray-700 mb-4">
       Did you take a breather before jumping into SS prep?
     </h3>
     <div class="space-y-4 mb-6">
@@ -653,12 +706,12 @@
       <input type="number" id="gapYearsPreSSInput" class="input-field mt-2 hidden" placeholder="Enter specific years (e.g., 3, 4)" min="3">
     </div>
 
-    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+    <h3 class="text-lg font-semibold text-gray-700 mb-4">
       How long did SS training last — the final academic boss fight?
     </h3>
     <input type="number" id="ssCourseDuration" class="input-field mb-6" step="0.5" min="0" value="3">
 
-    <h3 class="text-xl font-semibold text-gray-700 mb-4">
+    <h3 class="text-lg font-semibold text-gray-700 mb-4">
       Any delays during SS — strikes, burnout, or syllabus drama?
     </h3>
     <div class="space-y-4 mb-6">
@@ -693,14 +746,14 @@
   <h2 class="text-2xl md:text-3xl font-bold text-center mb-8">Your Legendary Doctor Journey Generated! 🎉</h2>
   <div class="result-display" id="total-years-display"></div>
 
-  <h3 class="text-xl font-semibold text-gray-700 mb-4">Your Path to Glory Unveiled:</h3>
+  <h3 class="text-lg font-semibold text-gray-700 mb-4">Your Path to Glory Unveiled:</h3>
   <div id="breakdown-section" class="space-y-2 mb-8 text-gray-700">
     <!-- Breakdown items will be inserted here by JavaScript -->
   </div>
 
   <div class="flex flex-col space-y-4 mb-6">
     <button onclick="shareJourney()" class="button-primary">Share My Epic Journey!</button>
-    <div id="copyMessage" class="text-center text-sm text-green-700 hidden">Link copied to clipboard!</div>
+    <div id="copyMessage" class="text-center text-lg text-green-700 hidden">Link copied to clipboard!</div>
     <button onclick="getMotivation()" class="button-primary">Get Super Motivation! ✨ (Powered by AI Magic!)</button>
     <div class="loading-spinner" id="motivationSpinner"></div>
     <div id="motivationMessage" class="motivation-box hidden"></div>
@@ -713,7 +766,7 @@
 </div>
 
 
-            <p class="text-sm text-center text-gray-500 mt-8">    <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
+            <p class="text-lg text-center text-gray-500 mt-8">    <p>🧠 Made with 💖 for future doctors | India 🇮🇳</p>
 </p>
         </div>
 
