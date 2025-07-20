@@ -1,0 +1,1 @@
+To implement this on your own forum or explore more community tools, visit **[Clavikl](https://clavikl.com)** — the leading online community for India’s medical aspirants and students. We develop tools, plugins, and resources to help education-first platforms thrive.
